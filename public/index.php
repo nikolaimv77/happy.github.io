@@ -1,0 +1,49 @@
+<?php
+
+declare(strict_types=1);
+
+date_default_timezone_set('Asia/Tashkent');
+header('X-Content-Type-Options: nosniff');
+header('Referrer-Policy: no-referrer');
+header('X-Frame-Options: SAMEORIGIN');
+$title = 'Happy Day My Love';
+?>
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4e7ff">
+  <meta name="description" content="Маленькая история, созданная с любовью для моего солнышка.">
+  <title><?= htmlspecialchars($title, ENT_QUOTES, 'UTF-8') ?></title>
+  <link rel="stylesheet" href="/assets/css/style.css?v=5">
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+  <div class="stars" aria-hidden="true"></div><div class="glow glow-one" aria-hidden="true"></div><div class="glow glow-two" aria-hidden="true"></div>
+  <main class="app-shell">
+    <header class="brand"><span class="brand-mark">✦</span><span>HAPPY DAY <b>MY LOVE</b></span><span class="brand-heart">♥</span></header>
+    <section class="scene" id="scene" aria-live="polite">
+      <p class="eyebrow" id="eyebrow">A LITTLE STORY FOR YOU</p>
+      <div class="heart-wrap" aria-hidden="true"><div class="heart-orbit orbit-one"></div><div class="heart-orbit orbit-two"></div><div class="heart">♥</div><span class="spark spark-one">✦</span><span class="spark spark-two">✧</span><span class="spark spark-three">✦</span></div>
+      <h1 id="title">Моё солнышко,<br>это для тебя</h1>
+      <p class="body" id="body">Я приготовил для тебя кое-что особенное. Маленькую историю, в которой каждое слово — от сердца.</p>
+      <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
+        <div class="time-unit"><strong id="days">--</strong><span>дней</span></div><i>:</i>
+        <div class="time-unit"><strong id="hours">--</strong><span>часов</span></div><i>:</i>
+        <div class="time-unit"><strong id="minutes">--</strong><span>минут</span></div><i>:</i>
+        <div class="time-unit"><strong id="seconds">--</strong><span>секунд</span></div>
+      </div>
+      <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
+      <button class="primary-button" id="next" type="button">Открыть мою историю <span>↗</span></button>
+      <button class="text-button" id="back" type="button" hidden>← Вернуться к отсчёту</button>
+      <div class="letter-stage" id="letter-stage" hidden aria-label="Конверт с письмом"><div class="envelope" id="envelope"><div class="envelope-back"></div><div class="letter-paper"><span>Моему солнышку</span><b>♥</b></div><div class="envelope-front"></div><div class="envelope-flap"></div><span class="wax-seal">♥</span></div><p class="envelope-caption">Для тебя — от всего сердца</p></div>
+      <div class="progress" id="progress" hidden><span id="progress-fill"></span></div>
+      <p class="signature" id="signature">Создано специально для тебя <span>♥</span></p>
+      <p class="chapter-counter" id="counter">30 · 10 · 2026</p>
+    </section>
+    <footer>ОДНА ИСТОРИЯ · ОДНО ПРИЗНАНИЕ · С ЛЮБОВЬЮ</footer>
+  </main>
+  <script src="/assets/js/app.js?v=5" defer></script>
+</body>
+</html>

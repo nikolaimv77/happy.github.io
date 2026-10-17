@@ -4,37 +4,39 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#390038">
-  <meta name="description" content="Романтический обратный отсчёт до дня рождения моего солнышка.">
+  <meta name="description" content="Для моего солнышка — с любовью.">
   <title>Happy Day My Love</title>
-  <link rel="stylesheet" href="./assets/css/style.css?v=4-reference-layout">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style.css?v=9">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div class="stars" aria-hidden="true"></div><div class="glow glow-one" aria-hidden="true"></div><div class="glow glow-two" aria-hidden="true"></div>
+  <div class="sparkles" aria-hidden="true"></div>
   <main class="app-shell">
-    <header class="brand"><span class="brand-mark">✦</span><span>HAPPY DAY <b>MY LOVE</b></span><span class="brand-heart">♥</span></header>
-    <section class="scene home" id="scene" aria-live="polite">
-      <p class="eyebrow" id="eyebrow"></p>
-      <div class="heart-wrap" aria-hidden="true"><div class="heart-orbit orbit-one"></div><div class="heart-orbit orbit-two"></div><div class="heart">♥</div><span class="spark spark-one">✦</span><span class="spark spark-two">✧</span><span class="spark spark-three">✦</span></div>
-      <figure class="portrait-frame" id="portrait-frame"><img src="./assets/images/sunshine-photo.jpg" alt="Моё солнышко на фоне гор" loading="eager"><figcaption>Моё солнышко ♥</figcaption></figure>
-      <h1 id="title">Моё солнышко,<br>это для тебя</h1>
-      <p class="body" id="body">Я приготовил для тебя кое-что особенное. Маленькую историю, в которой каждое слово — от сердца.</p>
-      <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
-        <div class="time-unit"><strong id="days">--</strong><span>дней</span></div><i>:</i>
-        <div class="time-unit"><strong id="hours">--</strong><span>часов</span></div><i>:</i>
-        <div class="time-unit"><strong id="minutes">--</strong><span>минут</span></div><i>:</i>
-        <div class="time-unit"><strong id="seconds">--</strong><span>секунд</span></div>
+    <section class="scene" id="scene" aria-live="polite">
+      <div class="content" id="content">
+        <p class="eyebrow" id="eyebrow">ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ</p>
+        <h1 id="title">Моё<br>солнышко</h1>
+        <div class="title-heart" aria-hidden="true">♡</div>
+        <p class="body" id="body">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span></p>
+        <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
+          <div class="time-unit"><strong id="days">--</strong><span>ДНЕЙ</span></div>
+          <div class="time-unit"><strong id="hours">--</strong><span>ЧАСА</span></div>
+          <div class="time-unit"><strong id="minutes">--</strong><span>МИНУТ</span></div>
+          <div class="time-unit"><strong id="seconds">--</strong><span>СЕКУНД</span></div>
+        </div>
+        <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
+        <button class="primary-button" id="next" type="button">Открыть сюрприз <span>♡</span></button>
+        <button class="text-button" id="back" type="button" hidden>← Вернуться к отсчёту</button>
+        <div class="letter-stage" id="letter-stage" hidden aria-label="Конверт с письмом"><div class="envelope" id="envelope"><div class="envelope-back"></div><div class="letter-paper"><span>Моему солнышку</span><b>♥</b></div><div class="envelope-front"></div><div class="envelope-flap"></div><span class="wax-seal">♥</span></div><p class="envelope-caption">Для тебя — от всего сердца</p></div>
+        <div class="progress" id="progress" hidden><span id="progress-fill"></span></div>
+        <p class="signature" id="signature">С любовью, для тебя <span>♥</span></p>
+        <p class="chapter-counter" id="counter">30 · 10 · 2026</p>
       </div>
-      <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
-      <button class="primary-button" id="next" type="button">Открыть сюрприз <span>↗</span></button>
-      <button class="text-button" id="back" type="button" hidden>← Вернуться к отсчёту</button>
-      <div class="letter-stage" id="letter-stage" hidden aria-label="Конверт с письмом"><div class="envelope" id="envelope"><div class="envelope-back"></div><div class="letter-paper"><span>Моему солнышку</span><b>♥</b></div><div class="envelope-front"></div><div class="envelope-flap"></div><span class="wax-seal">♥</span></div><p class="envelope-caption">Для тебя — от всего сердца</p></div>
-      <div class="progress" id="progress" hidden><span id="progress-fill"></span></div>
-      <p class="signature" id="signature">Создано специально для тебя <span>♥</span></p>
-      <p class="chapter-counter" id="counter">30 · 10 · 2026</p>
     </section>
-    <footer>ОДНА ИСТОРИЯ · ОДНО ПРИЗНАНИЕ · С ЛЮБОВЬЮ</footer>
   </main>
-  <script src="./assets/js/app.js?v=4-reference-layout" defer></script>
+  <script src="./assets/js/app.js?v=9" defer></script>
 </body>
 </html>

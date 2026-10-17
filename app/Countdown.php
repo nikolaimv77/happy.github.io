@@ -83,8 +83,8 @@ final class Countdown
         $miniAppUrl = trim((string) ($_ENV['MINI_APP_URL'] ?? ''));
         if ($miniAppUrl !== '' && filter_var($miniAppUrl, FILTER_VALIDATE_URL) && str_starts_with(strtolower($miniAppUrl), 'https://')) {
             $rows[] = [[
-                'text' => '💜 Открыть сюрприз',
-                'web_app' => ['url' => $miniAppUrl . (str_contains($miniAppUrl, '?') ? '&' : '?') . 'story=1'],
+                'text' => '✨ Открыть романтический подарок',
+                'web_app' => ['url' => $miniAppUrl],
             ]];
         }
         $rows[] = [

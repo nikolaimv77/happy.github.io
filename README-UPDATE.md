@@ -1,16 +1,10 @@
-# Happy Day My Love — Lilac & Gold animation update
+# Happy Day My Love — Lilac & Gold animated redesign
 
-Copy/merge `public/` into `/Users/mac/Sites/happy.github.io/public/`, replacing the three included files:
+This update keeps the existing Mini App structure and romantic content while shifting the palette decisively away from pink toward lilac, lavender, and violet with restrained gold accents. It includes animated lavender aurora background, floating sparkles, pulsing heart, rotating orbits, glowing title, shimmering CTA, and a lilac/gold envelope.
+
+## Replace these files in the repository
 - `public/index.html`
 - `public/assets/css/style.css`
-- `public/assets/js/app.js`
+- `public/assets/js/app.js` (unchanged app logic, cache version updated in HTML)
 
-This update deepens the lilac/purple and gold palette, adds a moving golden sheen, luminous heart and orbit animations, shimmer on the main button, drifting ambient hearts/sparkles, and improved gold/lilac styling for the envelope. It respects `prefers-reduced-motion`.
-
-Then from the repository root:
-
-    git add public/index.html public/assets/css/style.css public/assets/js/app.js
-    git commit -m "Enhance lilac and gold animations"
-    git push origin main
-
-GitHub Pages should be configured to use **GitHub Actions**. Check the Actions run after pushing.
+Then commit and push to `main`; ensure the GitHub Actions Pages workflow completes successfully. The stylesheet URL is versioned `v=8` to invalidate the old browser cache.

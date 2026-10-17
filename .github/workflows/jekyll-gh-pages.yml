@@ -18,11 +18,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,8 +28,10 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Prepare static site
+      - name: Prepare static site from public
         run: |
+          test -f public/index.html
+          test -d public/assets
           mkdir -p _site
           cp public/index.html _site/index.html
           cp -R public/assets _site/assets
@@ -41,6 +41,6 @@ jobs:
         with:
           path: ./_site
 
-      - name: Deploy
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

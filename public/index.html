@@ -17,7 +17,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=20">
+  <link rel="stylesheet" href="./assets/css/style.css?v=21">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -111,9 +111,22 @@
       </div>
     </section>
   </main>
-  <div class="lock-note" id="lock-note" hidden role="status">
-    <b>🔒 Сюрприз ещё спит</b>
-    <span>Он откроется 30 октября ровно в 00:00 — тебе придёт уведомление в Telegram ♥</span>
+  <div class="wait-screen" id="wait-screen" hidden role="dialog" aria-modal="true" aria-labelledby="wait-title">
+    <div class="wait-card">
+      <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span><span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+      <div class="wait-gift" aria-hidden="true">🎁</div>
+      <p class="eyebrow">СЮРПРИЗ ЕЩЁ СПИТ</p>
+      <h2 id="wait-title">Немного терпения</h2>
+      <svg class="flourish-heart" viewBox="0 0 260 64" aria-hidden="true">
+        <path d="M8 40 C40 40 52 22 76 30 C92 35 88 50 76 46 C68 43 74 34 84 36 C100 40 106 46 112 44" />
+        <path d="M252 40 C220 40 208 22 184 30 C168 35 172 50 184 46 C192 43 186 34 176 36 C160 40 154 46 148 44" />
+        <path class="heart" d="M130 58 C112 44 104 36 104 26 C104 17 111 11 119 11 C124 11 128 14 130 18 C132 14 136 11 141 11 C149 11 156 17 156 26 C156 36 148 44 130 58 Z" />
+      </svg>
+      <p class="wait-text">Я очень старался, чтобы этот подарок получился особенным. Он откроется <b>30&nbsp;октября ровно в&nbsp;00:00</b>&nbsp;— в эту минуту тебе придёт уведомление в&nbsp;Telegram.</p>
+      <p class="wait-left" id="wait-left"></p>
+      <p class="wait-sub">А пока — просто улыбнись. Ты даже не представляешь, как тебя ждут ♥</p>
+      <button class="primary-button" id="wait-close" type="button">Хорошо, я подожду <span>♡</span></button>
+    </div>
   </div>
   <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Просмотр фото">
     <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">×</button>
@@ -131,6 +144,6 @@
       <button class="primary-button" id="secret-close" type="button">Обнять в ответ <span>♥</span></button>
     </div>
   </div>
-  <script src="./assets/js/app.js?v=20" defer></script>
+  <script src="./assets/js/app.js?v=21" defer></script>
 </body>
 </html>

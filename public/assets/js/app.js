@@ -16,7 +16,7 @@
   }
   function fadeVolume(to, ms = 2500) {
     const from = music.volume, start = performance.now();
-    const tick = (now) => { const t = Math.min(1, (now - start) / ms); music.volume = from + (to - from) * t; if (t < 1 && !music.paused) requestAnimationFrame(tick); };
+    const tick = (now) => { const t = Math.max(0, Math.min(1, (now - start) / ms)); music.volume = Math.max(0, Math.min(1, from + (to - from) * t)); if (t < 1 && !music.paused) requestAnimationFrame(tick); };
     requestAnimationFrame(tick);
   }
   async function playMusic() {
@@ -37,18 +37,23 @@
   const previewMode = new URLSearchParams(location.search).get('preview') === 'solnce3010';
   // Сюрприз закрыт до 30.10.2026 00:00 (Ташкент); в эту минуту бот присылает уведомление.
   const isLocked = () => Date.now() < target.getTime() && !previewMode;
-  let lockTimer = 0;
+  const waitScreen = $('wait-screen');
   function showLockNote() {
-    const note = $('lock-note'); if (!note) return;
-    note.hidden = false; note.classList.remove('show'); void note.offsetWidth; note.classList.add('show');
-    if (posterOpen) { posterOpen.classList.remove('shake'); void posterOpen.offsetWidth; posterOpen.classList.add('shake'); }
-    window.clearTimeout(lockTimer); lockTimer = window.setTimeout(() => { note.hidden = true; }, 5000);
+    if (!waitScreen) return;
+    updateWaitLeft(); waitScreen.hidden = false; document.body.classList.add('no-scroll');
+    burstFrom(posterOpen); $('wait-close').focus();
+  }
+  function closeWait() { waitScreen.hidden = true; document.body.classList.remove('no-scroll'); if (posterOpen) posterOpen.focus(); }
+  function updateWaitLeft() {
+    const el = $('wait-left'); if (!el) return;
+    const diff = Math.max(0, target.getTime() - Date.now()), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000), m = Math.floor(diff % 3600000 / 60000);
+    const parts = []; if (d) parts.push(d + ' ' + plural(d, unitWords.days)); if (h) parts.push(h + ' ' + plural(h, unitWords.hours)); parts.push(m + ' ' + plural(m, unitWords.minutes));
+    el.textContent = 'Осталось ' + parts.join(' ');
   }
   let lastLocked = null;
   function syncLock() {
-    const locked = isLocked(); if (!posterOpen || locked === lastLocked) return; lastLocked = locked;
-    posterOpen.classList.toggle('locked', locked);
-    posterOpen.innerHTML = locked ? '<span class="lock">🔒</span> Откроется 30.10 в 00:00' : 'Открыть сюрприз <span>♡</span>';
+    const locked = isLocked(); if (locked === lastLocked) return; lastLocked = locked;
+    if (!locked && waitScreen && !waitScreen.hidden) closeWait();
   }
   const chapters = [
     {eyebrow:'ГЛАВА I · ОТ ВСЕГО СЕРДЦА',title:'Ты особенная',body:'Солнце, иногда мы привыкаем к тому, что хорошие люди есть рядом. И не всегда находим время сказать им, насколько они важны.\n\nСегодня я не хочу оставлять это несказанным. Ты занимаешь особое место в моём сердце, и мне хочется, чтобы ты всегда знала, как много значишь для меня.',button:'Продолжить историю',counter:'01 / 04'},
@@ -135,6 +140,9 @@
     if (chapterIndex < chapters.length - 1) showChapter(chapterIndex + 1); else showChapter(chapters.length - 1);
   });
   back.addEventListener('click', showCountdown);
+  $('wait-close').addEventListener('click', closeWait);
+  waitScreen.addEventListener('click', (e) => { if (e.target === waitScreen) closeWait(); });
+  setInterval(() => { if (!waitScreen.hidden) updateWaitLeft(); }, 1000);
 
   // ---------- 2. Письмо печатается на глазах (касание — показать сразу) ----------
   function typeLetter(instant) {
@@ -191,6 +199,7 @@
   document.addEventListener('keydown', (e) => {
     if (!lightbox.hidden) { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') showPhoto(lbIndex + 1); if (e.key === 'ArrowLeft') showPhoto(lbIndex - 1); }
     else if (!secret.hidden && e.key === 'Escape') closeSecret();
+    else if (!waitScreen.hidden && e.key === 'Escape') closeWait();
   });
 
   // ---------- 4. «Почему я тебя люблю» ----------

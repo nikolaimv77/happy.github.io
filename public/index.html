@@ -13,21 +13,24 @@
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
-  <div class="sparkles" aria-hidden="true"></div>
-  <main class="app-shell">
+  <main class="poster-screen" id="poster-screen" aria-label="Поздравление для моего солнышка">
+    <img class="poster-art" src="./assets/images/reference-countdown.jpg" alt="Моё солнышко. До твоего особенного дня осталось. С каждым днём я всё больше понимаю, как мне повезло, что ты есть в моей жизни." draggable="false">
+    <button class="poster-hotspot" id="poster-open" type="button" aria-label="Открыть сюрприз"></button>
+  </main>
+  <div class="sparkles app-sparkles" aria-hidden="true"></div>
+  <main class="app-shell story-shell" id="story-shell" hidden>
     <section class="scene" id="scene" aria-live="polite">
       <div class="content" id="content">
+        <p class="eyebrow" id="eyebrow">ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ</p>
         <h1 id="title">Моё<br>солнышко</h1>
         <div class="title-heart" aria-hidden="true">♡</div>
-        <p class="eyebrow" id="eyebrow">До твоего<br>особенного дня<br>осталось</p>
+        <p class="body" id="body">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span></p>
         <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
           <div class="time-unit"><strong id="days">--</strong><span>ДНЕЙ</span></div>
           <div class="time-unit"><strong id="hours">--</strong><span>ЧАСА</span></div>
           <div class="time-unit"><strong id="minutes">--</strong><span>МИНУТ</span></div>
           <div class="time-unit"><strong id="seconds">--</strong><span>СЕКУНД</span></div>
         </div>
-        <div class="ornament-divider" aria-hidden="true"><i></i><b>♥</b><i></i></div>
-        <p class="body" id="body">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span></p>
         <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
         <button class="primary-button" id="next" type="button">Открыть сюрприз <span>♡</span></button>
         <button class="text-button" id="back" type="button" hidden>← Вернуться к отсчёту</button>

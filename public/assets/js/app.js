@@ -3,6 +3,33 @@
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#390038'); tg.setBackgroundColor('#390038'); } catch (_) {} }
   const $ = (id) => document.getElementById(id);
+  // Music starts only after the visitor taps the control, as required by mobile browsers.
+  const music = $('background-music');
+  const musicToggle = $('music-toggle');
+  if (music && musicToggle) {
+    music.volume = 0.32;
+    musicToggle.addEventListener('click', async () => {
+      if (music.paused) {
+        try {
+          await music.play();
+          musicToggle.classList.add('is-playing');
+          musicToggle.setAttribute('aria-pressed', 'true');
+          musicToggle.setAttribute('aria-label', 'Выключить романтическую музыку');
+          musicToggle.title = 'Выключить музыку';
+        } catch (_) {
+          musicToggle.classList.remove('is-playing');
+          musicToggle.setAttribute('aria-pressed', 'false');
+          musicToggle.title = 'Нажмите, чтобы включить музыку';
+        }
+      } else {
+        music.pause();
+        musicToggle.classList.remove('is-playing');
+        musicToggle.setAttribute('aria-pressed', 'false');
+        musicToggle.setAttribute('aria-label', 'Включить романтическую музыку');
+        musicToggle.title = 'Включить музыку';
+      }
+    });
+  }
   const poster = $('poster-screen'), storyShell = $('story-shell'), posterOpen = $('poster-open');
   function openStoryApp() { if (poster) poster.hidden = true; if (storyShell) storyShell.hidden = false; }
   if (posterOpen) posterOpen.addEventListener('click', () => { openStoryApp(); if (next) next.click(); });
@@ -34,7 +61,7 @@
     eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = c.counter; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal');
   }
   function showCountdown() {
-    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
+    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ДНЯ РОЖДЕНИЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
     if (mode === 'story' && chapters[chapterIndex].letter) {

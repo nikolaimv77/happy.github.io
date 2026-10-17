@@ -1,5 +1,3 @@
-name: Deploy GitHub Pages
-
 on:
   push:
     branches:
@@ -21,8 +19,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
 
-    runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,11 +26,8 @@ jobs:
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
 
-      - name: Upload public directory
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./public
 
-      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4

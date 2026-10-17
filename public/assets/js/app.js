@@ -1,5 +1,29 @@
 (() => {
   'use strict';
+
+  // Subtle floating lilac hearts and golden sparkles; decorative only.
+  (() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const layer = document.createElement('div');
+    layer.className = 'ambient-particles';
+    layer.setAttribute('aria-hidden', 'true');
+    document.body.prepend(layer);
+    const symbols = ['✦', '✧', '♥', '·'];
+    const colors = ['#f7d98b', '#d9a9ff', '#f8e9ff', '#c58aff'];
+    for (let i = 0; i < 24; i++) {
+      const p = document.createElement('span');
+      p.className = i % 3 === 0 ? 'ambient-particle dot' : 'ambient-particle';
+      p.style.setProperty('--x', `${Math.random() * 100}%`);
+      p.style.setProperty('--size', `${8 + Math.random() * 13}px`);
+      p.style.setProperty('--particle-color', colors[i % colors.length]);
+      p.style.setProperty('--duration', `${13 + Math.random() * 18}s`);
+      p.style.setProperty('--delay', `${-Math.random() * 25}s`);
+      p.style.setProperty('--drift', `${Math.round(Math.random() * 100 - 50)}px`);
+      if (!p.classList.contains('dot')) p.textContent = symbols[i % symbols.length];
+      layer.appendChild(p);
+    }
+  })();
+
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#07111f'); tg.setBackgroundColor('#07111f'); } catch (_) {} }
   const $ = (id) => document.getElementById(id);

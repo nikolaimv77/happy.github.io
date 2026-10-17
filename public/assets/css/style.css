@@ -187,7 +187,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .scene.letter .content{max-width:640px;display:flex;flex-direction:column;align-items:center}
 .scene.letter .content>*{order:20}
 .scene.letter .eyebrow{order:1}.scene.letter .content h1{order:2}.scene.letter .title-heart{order:3}
-.scene.letter .letter-stage{order:4}.scene.letter .body{order:5}.scene.letter #next{order:6}.scene.letter .text-button{order:7}
+.scene.letter .letter-stage{order:4}.scene.letter .body{order:5}.scene.letter #next{order:7}.scene.letter .text-button{order:8}
 .scene.letter .content h1{font-size:clamp(40px,6vw,64px)}
 .scene.letter .body{align-self:stretch;
   text-align:left;font-size:clamp(17px,2vw,20px);line-height:1.65;color:var(--plum);
@@ -286,18 +286,18 @@ button{font:inherit;-webkit-tap-highlight-color:transparent}
 .lock-note.show{animation:drop .45s cubic-bezier(.2,.8,.2,1.2) both}
 
 /* ---------- Свечи (в день рождения) ---------- */
-.cake{display:flex;flex-direction:column;align-items:center;gap:0}
+.cake{display:flex;flex-direction:column;align-items:center;gap:0;padding-top:min(7cqw,4cqh)}
 .candles{display:flex;gap:min(7cqw,4cqh);position:relative;z-index:1}
-.candle{position:relative;width:min(4.6cqw,2.6cqh);height:min(15cqw,8.5cqh);padding:0;border:0;border-radius:4px;cursor:pointer;
+.candle{position:relative;width:min(4.6cqw,2.6cqh);height:min(10cqw,5.6cqh);padding:0;border:0;border-radius:4px;cursor:pointer;
   background:repeating-linear-gradient(135deg,var(--mist) 0 6px,var(--lilac) 6px 12px);box-shadow:inset 0 0 0 1px rgba(255,255,255,.4)}
 .candle:before{content:"";position:absolute;left:50%;top:-6px;width:2px;height:7px;background:#3a2a2a;transform:translateX(-50%)}
-.flame{position:absolute;left:50%;bottom:calc(100% + 4px);width:14px;height:22px;transform:translateX(-50%);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
-  background:radial-gradient(ellipse at 50% 70%,#fff 0 20%,#ffe28a 35%,#f5a524 70%,transparent 72%);
+.flame{position:absolute;left:50%;bottom:calc(100% + 3px);width:18px;height:28px;transform:translateX(-50%);border-radius:50% 50% 50% 50%/60% 60% 40% 40%;
+  background:radial-gradient(ellipse at 50% 72%,#fff 0 22%,#fff1b0 34%,#ffc94d 55%,#f08c1c 72%,transparent 74%);
   filter:drop-shadow(0 0 8px #ffd36e) drop-shadow(0 0 16px rgba(255,190,80,.8));animation:flicker .18s ease-in-out infinite alternate;transform-origin:50% 90%}
 .candle.out .flame{animation:blowout .5s ease forwards}
-.cake-body{width:min(46cqw,26cqh);height:min(9cqw,5cqh);border-radius:10px 10px 14px 14px;border:1.5px solid var(--gold-line);
+.cake-body{width:min(46cqw,26cqh);height:min(7cqw,4cqh);border-radius:10px 10px 14px 14px;border:1.5px solid var(--gold-line);
   background:linear-gradient(180deg,var(--mist) 0 22%,var(--lilac) 22% 60%,var(--orchid) 60%);box-shadow:0 0 14px rgba(241,197,110,.45)}
-.cake-hint{margin:10px 0 0;font:italic 500 clamp(15px,min(4.6cqw,2.6cqh),22px)/1.2 var(--serif);color:var(--gold-light);text-shadow:0 2px 8px rgba(34,0,31,.9)}
+.cake-hint{margin:8px 0 0;font:italic 500 clamp(14px,min(4.2cqw,2.4cqh),20px)/1.2 var(--serif);color:var(--gold-light);text-shadow:0 2px 8px rgba(34,0,31,.9)}
 .confetti{position:fixed;z-index:60;top:-14px;width:8px;height:13px;border-radius:2px;pointer-events:none;animation:confetti linear forwards}
 .confetti:nth-child(3n){border-radius:50%;width:9px;height:9px}
 

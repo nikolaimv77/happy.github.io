@@ -21,7 +21,7 @@
   }
   async function playMusic() {
     if (!music) return;
-    try { music.volume = 0; await music.play(); fadeVolume(0.85); } catch (_) { if (musicState) musicState.textContent = 'Нажми ещё раз'; }
+    try { music.volume = 0; await music.play(); fadeVolume(0.85); } catch (_) { if (musicState) musicState.textContent = 'Нажми еще раз'; }
     syncMusic();
   }
   if (musicButton && music) {
@@ -56,14 +56,14 @@
     if (!locked && waitScreen && !waitScreen.hidden) closeWait();
   }
   const chapters = [
-    {eyebrow:'ГЛАВА I · ОТ ВСЕГО СЕРДЦА',title:'Ты особенная',body:'Солнце, иногда мы привыкаем к тому, что хорошие люди есть рядом. И не всегда находим время сказать им, насколько они важны.\n\nСегодня я не хочу оставлять это несказанным. Ты занимаешь особое место в моём сердце, и мне хочется, чтобы ты всегда знала, как много значишь для меня.',button:'Продолжить историю',counter:'01 / 04'},
-    {eyebrow:'ГЛАВА II · МОЁ СОЛНЫШКО',title:'Почему я так тебя называю',body:'В слове «солнышко» есть что-то очень простое и настоящее: свет, тепло, уют. Что-то, к чему хочется возвращаться.\n\nЯ не обещаю, что каждый день будет идеальным. Но хочу, чтобы рядом со мной у тебя было больше поводов улыбаться, больше спокойствия и больше уверенности в том, что тебя любят.',button:'Ещё несколько слов',counter:'02 / 04'},
-    {eyebrow:'ГЛАВА III · МОЁ ЖЕЛАНИЕ',title:'Пусть впереди будет много хорошего',body:'Я желаю тебе не только счастья, здоровья и исполнения желаний. Хочу, чтобы ты чаще чувствовала себя счастливой в самых обычных моментах.\n\nПусть у тебя хватает сил на важное, времени на то, что радует, и спокойствия для того, что нельзя изменить. И пусть в твоей жизни всегда будет место для нежности, смеха и любви.',button:'Смотреть фото',counter:'03 / 04'},
-    {eyebrow:'МОЕМУ СОЛНЫШКУ · С ЛЮБОВЬЮ',title:'С днём рождения, моё солнце',body:'Моё любимое солнце.\n\nС днём рождения тебя. ❤️\n\nСегодня мне хочется, чтобы ты хотя бы на мгновение остановилась и почувствовала, насколько ты важна. Иногда самые искренние чувства непросто выразить словами, но самое главное оказывается гораздо проще.\n\nЯ рад, что ты есть в моей жизни.\n\nМне хочется, чтобы ты чаще улыбалась, чтобы твои глаза светились от счастья, чтобы у тебя исполнялись желания, о которых ты пока никому не рассказываешь. Хочу, чтобы ты берегла себя, не забывала о своих мечтах и всегда находила время для того, что делает тебя счастливой.\n\nА ещё мне хочется дарить тебе тепло не только в праздники. В обычные дни, когда нет особого повода, когда достаточно одного доброго слова, объятия или просто ощущения, что рядом есть близкий человек.\n\nЯ не знаю, какими будут все наши завтрашние дни. Но я знаю, что хочу наполнять их хорошими моментами вместе с тобой, радовать тебя и находить новые причины говорить тебе, как ты мне дорога.\n\nПусть новый год твоей жизни будет добрым к тебе. Пусть в нём будет много света, здоровья, душевного спокойствия, любви и счастливых мгновений.\n\nСпасибо тебе за то, что ты есть. Крепко обнимаю тебя. ❤️\n\nТвой человек.',button:'Прочитать письмо ещё раз',counter:'04 / 04',letter:true}
+    {eyebrow:'ГЛАВА I · ОТ ВСЕГО СЕРДЦА',title:'Ты особенная',body:'Солнце, иногда мы привыкаем к тому, что хорошие люди есть рядом. И не всегда находим время сказать им, насколько они важны.\n\nСегодня я не хочу оставлять это несказанным. Ты занимаешь особое место в моем сердце, и мне хочется, чтобы ты всегда знала, как много значишь для меня.',button:'Продолжить историю',counter:'01 / 04'},
+    {eyebrow:'ГЛАВА II · МОЕ СОЛНЫШКО',title:'Почему я так тебя называю',body:'В слове «солнышко» есть что-то очень простое и настоящее: свет, тепло, уют. Что-то, к чему хочется возвращаться.\n\nЯ не обещаю, что каждый день будет идеальным. Но хочу, чтобы рядом со мной у тебя было больше поводов улыбаться, больше спокойствия и больше уверенности в том, что тебя любят.',button:'Еще несколько слов',counter:'02 / 04'},
+    {eyebrow:'ГЛАВА III · МОЕ ЖЕЛАНИЕ',title:'Пусть впереди будет много хорошего',body:'Я желаю тебе не только счастья, здоровья и исполнения желаний. Хочу, чтобы ты чаще чувствовала себя счастливой в самых обычных моментах.\n\nПусть у тебя хватает сил на важное, времени на то, что радует, и спокойствия для того, что нельзя изменить. И пусть в твоей жизни всегда будет место для нежности, смеха и любви.',button:'Смотреть фото',counter:'03 / 04'},
+    {eyebrow:'МОЕМУ СОЛНЫШКУ · С ЛЮБОВЬЮ',title:'С днем рождения, мое солнце',body:'Мое любимое солнце.\n\nС днем рождения тебя. ❤️\n\nСегодня мне хочется, чтобы ты хотя бы на мгновение остановилась и почувствовала, насколько ты важна. Иногда самые искренние чувства непросто выразить словами, но самое главное оказывается гораздо проще.\n\nЯ рад, что ты есть в моей жизни.\n\nМне хочется, чтобы ты чаще улыбалась, чтобы твои глаза светились от счастья, чтобы у тебя исполнялись желания, о которых ты пока никому не рассказываешь. Хочу, чтобы ты берегла себя, не забывала о своих мечтах и всегда находила время для того, что делает тебя счастливой.\n\nА еще мне хочется дарить тебе тепло не только в праздники. В обычные дни, когда нет особого повода, когда достаточно одного доброго слова, объятия или просто ощущения, что рядом есть близкий человек.\n\nЯ не знаю, какими будут все наши завтрашние дни. Но я знаю, что хочу наполнять их хорошими моментами вместе с тобой, радовать тебя и находить новые причины говорить тебе, как ты мне дорога.\n\nПусть новый год твоей жизни будет добрым к тебе. Пусть в нем будет много света, здоровья, душевного спокойствия, любви и счастливых мгновений.\n\nСпасибо тебе за то, что ты есть. Крепко обнимаю тебя. ❤️\n\nТвой человек.',button:'Прочитать письмо еще раз',counter:'04 / 04',letter:true}
   ];
   chapters.splice(3, 0,
-    {eyebrow:'ГЛАВА IV · ФОТО',title:'Ты — моё вдохновение',body:'Я храню эти кадры не потому, что на них красивые горы.\nА потому, что на них — ты.',button:'Почему я тебя люблю',gallery:true},
-    {eyebrow:'ГЛАВА V · ПРИЧИНЫ',title:'Почему я тебя люблю',body:'Нажми на каждую карточку ♥',button:'Открыть моё письмо',reasons:true}
+    {eyebrow:'ГЛАВА IV · ФОТО',title:'Ты — мое вдохновение',body:'Я храню эти кадры не потому, что на них красивые горы.\nА потому, что на них — ты.',button:'Почему я тебя люблю',gallery:true},
+    {eyebrow:'ГЛАВА V · ПРИЧИНЫ',title:'Почему я тебя люблю',body:'Нажми на каждую карточку ♥',button:'Открыть мое письмо',reasons:true}
   );
   const gallery = $('gallery'), reasonsBox = $('reasons'), secretHeart = $('secret-heart');
   let typingTimer = 0;
@@ -107,23 +107,23 @@
     if (Date.now() >= target.getTime() && !document.body.classList.contains('is-birthday')) {
       document.body.classList.add('is-birthday');
       const posterSubtitle = $('poster-subtitle'), posterCountdown = $('poster-countdown');
-      if (posterSubtitle) posterSubtitle.innerHTML = 'Сегодня твой день!<br>С днём рождения,<br>моя любимая';
+      if (posterSubtitle) posterSubtitle.innerHTML = 'Сегодня твой день!<br>С днем рождения,<br>моя любимая';
       if (posterCountdown) posterCountdown.hidden = true;
       const cake = $('cake'); if (cake) cake.hidden = false;
       if (posterOpen) posterOpen.innerHTML = 'Открыть поздравление <span>♡</span>';
       window.setTimeout(() => { burst(window.innerWidth / 2, window.innerHeight / 2, 28); confettiRain(70); }, 600);
       if (eyebrow) eyebrow.textContent = '30 ОКТЯБРЯ · ТВОЙ ОСОБЕННЫЙ ДЕНЬ';
-      if (hint) hint.textContent = 'Сегодня всё это — для тебя ❤️';
+      if (hint) hint.textContent = 'Сегодня все это — для тебя ❤️';
       if (next) next.innerHTML = 'Начать поздравление <span>↗</span>';
     }
   }
   function showChapter(index) {
     chapterIndex = index; mode = 'story'; const c = chapters[index];
     scene.classList.remove('reveal','letter'); void scene.offsetWidth; if (c.letter) scene.classList.add('letter');
-    eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(chapters.length).padStart(2, '0'); gallery.hidden = !c.gallery; reasonsBox.hidden = !c.reasons; secretHeart.hidden = true; window.clearTimeout(typingTimer); if (c.gallery) gallery.querySelector('.gallery-track').scrollLeft = 0; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal'); placeHeart(index);
+    eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть мое письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(chapters.length).padStart(2, '0'); gallery.hidden = !c.gallery; reasonsBox.hidden = !c.reasons; secretHeart.hidden = true; window.clearTimeout(typingTimer); if (c.gallery) gallery.querySelector('.gallery-track').scrollLeft = 0; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal'); placeHeart(index);
   }
   function showCountdown() {
-    mode = 'countdown'; placeHeart(-1); gallery.hidden = true; reasonsBox.hidden = true; secretHeart.hidden = true; window.clearTimeout(typingTimer); letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
+    mode = 'countdown'; placeHeart(-1); gallery.hidden = true; reasonsBox.hidden = true; secretHeart.hidden = true; window.clearTimeout(typingTimer); letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Мое<br>солнышко'; body.innerHTML = 'С каждым днем<br>я все больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
     burstFrom(next);
@@ -133,7 +133,7 @@
       return;
     }
     if (mode === 'countdown') {
-      if (Date.now() < target.getTime() && !previewMode) { eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА'; title.textContent = 'Самое главное — впереди'; body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️'; countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом'; next.innerHTML = 'Вернуться к отсчёту <span>↗</span>'; mode = 'teaser'; return; }
+      if (Date.now() < target.getTime() && !previewMode) { eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА'; title.textContent = 'Самое главное — впереди'; body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️'; countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом'; next.innerHTML = 'Вернуться к отсчету <span>↗</span>'; mode = 'teaser'; return; }
       showChapter(0); return;
     }
     if (mode === 'teaser') { showCountdown(); return; }
@@ -148,7 +148,7 @@
   function typeLetter(instant) {
     const text = chapters[chapters.length - 1].body; let i = 0;
     window.clearTimeout(typingTimer); body.hidden = false; body.textContent = ''; body.classList.add('typing'); secretHeart.hidden = true;
-    const finish = () => { window.clearTimeout(typingTimer); body.textContent = text; body.classList.remove('typing'); next.innerHTML = 'Прочитать письмо ещё раз <span>↗</span>'; secretHeart.hidden = false; };
+    const finish = () => { window.clearTimeout(typingTimer); body.textContent = text; body.classList.remove('typing'); next.innerHTML = 'Прочитать письмо еще раз <span>↗</span>'; secretHeart.hidden = false; };
     if (instant === true || reduceMotion) { finish(); return; }
     next.innerHTML = 'Показать письмо целиком <span>↓</span>';
     const step = () => { i = Math.min(text.length, i + 2); body.textContent = text.slice(0, i); if (i >= text.length) { finish(); return; } const ch = text[i - 1]; typingTimer = window.setTimeout(step, ch === '\n' ? 160 : /[.,!?]/.test(ch) ? 90 : 22); };
@@ -184,7 +184,7 @@
   };
   track.addEventListener('scroll', () => window.requestAnimationFrame(syncDots), {passive:true}); syncDots();
 
-  // Фотогалерея открыта всегда — даже до 30.10, когда сам сюрприз ещё закрыт.
+  // Фотогалерея открыта всегда — даже до 30.10, когда сам сюрприз еще закрыт.
   const posterGallery = $('poster-gallery');
   if (posterGallery) posterGallery.addEventListener('click', () => openLightbox(0));
   const lightbox = $('lightbox'), lbImg = $('lightbox-img'), lbCap = $('lightbox-caption'), lbCount = $('lightbox-count');
@@ -211,9 +211,9 @@
   // ---------- 4. «Почему я тебя люблю» ----------
   const reasons = [
     ['☀', 'Твоя улыбка', 'Она делает любой день теплее — даже самый пасмурный.'],
-    ['✦', 'Твоя сила', 'Ты справляешься с тем, что другим не под силу, и остаёшься нежной.'],
+    ['✦', 'Твоя сила', 'Ты справляешься с тем, что другим не под силу, и остаешься нежной.'],
     ['♡', 'Твоя забота', 'Рядом с тобой хочется быть лучше и спокойнее.'],
-    ['❀', 'Твой взгляд', 'В нём столько света, что я каждый раз теряюсь.'],
+    ['❀', 'Твой взгляд', 'В нем столько света, что я каждый раз теряюсь.'],
     ['⛰', 'Твоя смелость', 'Ты поднимаешься на вершины — и тянешь меня за собой.'],
     ['∞', 'Просто ты', 'Мне не нужна причина. Я люблю тебя целиком.']
   ];
@@ -230,7 +230,7 @@
   secretHeart.addEventListener('click', () => { secret.hidden = false; document.body.classList.add('no-scroll'); burst(window.innerWidth / 2, window.innerHeight / 2, 24); $('secret-close').focus(); });
   $('secret-close').addEventListener('click', () => { burstFrom($('secret-close')); window.setTimeout(() => { closeSecret(); openFinale(); }, 450); });
 
-  // ---------- Финал: «С днём рождения» на весь экран и салют ----------
+  // ---------- Финал: «С днем рождения» на весь экран и салют ----------
   const finale = $('finale'), canvas = $('fireworks'), ctx = canvas.getContext('2d');
   const fwColors = ['#f1c56e', '#fff0c2', '#cab3e6', '#af7bbd', '#f7b8e4', '#ffffff'];
   let rockets = [], sparks = [], fwFrame = 0, fwLaunch = 0, dpr = 1;
@@ -304,7 +304,7 @@
   function renderFuture() {
     const open = Date.now() >= futureTarget.getTime() || previewMode;
     $('future-locked').hidden = open; $('future-text').hidden = !open;
-    $('future-eyebrow').textContent = open ? '30 · 10 · 2027 · ПРОШЁЛ ГОД' : 'ПИСЬМО В БУДУЩЕЕ';
+    $('future-eyebrow').textContent = open ? '30 · 10 · 2027 · ПРОШЕЛ ГОД' : 'ПИСЬМО В БУДУЩЕЕ';
     $('future-close').innerHTML = open ? 'Обнять тебя <span>♥</span>' : 'Буду ждать <span>♡</span>';
     if (!open) {
       const diff = futureTarget.getTime() - Date.now(), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000);

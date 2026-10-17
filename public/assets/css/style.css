@@ -368,3 +368,99 @@ footer { color: rgba(246,231,255,.72); padding-top: 14px; }
   .scene.home .time-unit span { font-size: 8px; }
 }
 @media(prefers-reduced-motion:reduce) { .scene.home:after { animation:none!important; } }
+
+/* Reference-matched countdown landing: mountain portrait, left-side timer, ornate gold frame */
+body.countdown-mode {
+  display:block; padding:0; min-height:100vh; min-height:100dvh; overflow-x:hidden;
+  background-color:#19051f;
+  background-image:
+    linear-gradient(90deg, rgba(24,3,31,.74) 0%, rgba(34,6,42,.54) 43%, rgba(33,5,40,.08) 76%),
+    linear-gradient(0deg, rgba(24,3,31,.88) 0%, transparent 38%, rgba(27,4,35,.08) 100%),
+    url('../images/sunshine-photo.jpg');
+  background-size:cover,cover,cover;
+  background-position:center,center,center 42%;
+  background-repeat:no-repeat;
+  background-attachment:fixed;
+  color:#fff0d9;
+}
+body.countdown-mode:before {
+  content:"";position:fixed;z-index:0;inset:17px;border:1px solid rgba(255,218,126,.95);border-radius:26px;pointer-events:none;
+  box-shadow:inset 0 0 0 2px rgba(255,241,191,.14),0 0 18px rgba(255,196,78,.22),0 0 3px rgba(255,238,178,.8);
+}
+body.countdown-mode:after {
+  content:"✦  ❧  ✦";position:fixed;z-index:0;top:18px;left:12px;color:#ffdf8a;font-size:24px;letter-spacing:10px;pointer-events:none;
+  text-shadow:0 0 8px #ffd875,0 0 20px #e9a93c;opacity:.9;
+}
+body.countdown-mode .stars {opacity:.32;z-index:0}
+body.countdown-mode .glow {display:none}
+body.countdown-mode .app-shell {width:min(100%,560px);min-height:100vh;min-height:100dvh;margin:0 auto;padding:clamp(34px,7vh,76px) 34px 36px;justify-content:center;z-index:1}
+body.countdown-mode .brand,body.countdown-mode footer {display:none}
+body.countdown-mode .scene.home {
+  width:100%;margin:0;padding:0;display:flex;flex-direction:column;align-items:flex-start;text-align:left;
+  min-height:0;overflow:visible;border:0;border-radius:0;background:transparent;box-shadow:none;backdrop-filter:none;animation:referenceReveal 1s ease both;
+}
+body.countdown-mode .scene.home:before,body.countdown-mode .scene.home:after {display:none}
+body.countdown-mode .scene.home .eyebrow,body.countdown-mode .scene.home .heart-wrap,body.countdown-mode .scene.home .portrait-frame {display:none!important}
+body.countdown-mode .scene.home h1 {
+  order:1;margin:0 0 24px;max-width:66%;color:#ffe4a0;font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(52px,13vw,82px);font-style:italic;font-weight:500;line-height:.83;letter-spacing:-.045em;text-align:left;
+  text-shadow:0 2px 3px #260b25,0 0 20px rgba(255,202,105,.25);text-wrap:initial;
+}
+body.countdown-mode .scene.home .hint {
+  order:2;max-width:52%;margin:0 0 19px;padding-left:6px;color:#fff0e0;font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(20px,5vw,27px);line-height:1.05;letter-spacing:0;text-align:center;text-shadow:0 2px 10px #210723;
+}
+body.countdown-mode .scene.home .countdown {
+  order:3;width:min(62vw,420px);display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 0 26px;padding:0;border:0;background:transparent;box-shadow:none;
+}
+body.countdown-mode .scene.home .time-unit {
+  min-width:0;min-height:104px;display:flex;align-items:center;justify-content:center;gap:7px;padding:9px 3px;
+  border:1px solid rgba(255,218,126,.9);border-radius:17px;background:linear-gradient(145deg,rgba(42,7,48,.78),rgba(62,16,65,.58));
+  box-shadow:inset 0 0 18px rgba(255,211,111,.08),0 0 13px rgba(255,190,66,.14);backdrop-filter:blur(5px);position:relative;overflow:hidden;
+}
+body.countdown-mode .scene.home .time-unit:after {content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 30%,rgba(255,240,185,.14) 48%,transparent 64%);transform:translateX(-120%);animation:tileShimmer 8s ease-in-out infinite}
+body.countdown-mode .scene.home .time-unit strong {font-family:'Cormorant Garamond',Georgia,serif;font-size:clamp(34px,9vw,51px);line-height:1;color:#fff0d8;font-weight:500;letter-spacing:-.03em;text-shadow:0 0 10px rgba(255,204,94,.24)}
+body.countdown-mode .scene.home .time-unit span {font-family:'Cormorant Garamond',Georgia,serif;color:#ffe7c8;font-size:clamp(10px,2.5vw,14px);letter-spacing:.02em;text-transform:uppercase}
+body.countdown-mode .scene.home .countdown i {display:none}
+body.countdown-mode .scene.home .body {
+  order:4;max-width:57%;margin:0 0 22px;padding:0 0 0 3px;color:#f4dfee;font-family:'Cormorant Garamond',Georgia,serif;
+  font-size:clamp(18px,4.7vw,25px);line-height:1.35;text-align:center;text-shadow:0 2px 8px rgba(23,2,28,.8);white-space:pre-line;
+}
+body.countdown-mode .scene.home .primary-button {
+  order:5;width:min(100%,360px);margin:0 0 17px;min-height:50px;padding:10px 16px;border-radius:999px;
+  border:1px solid #ffe6a0;background:linear-gradient(110deg,rgba(52,5,53,.94),rgba(117,43,111,.9),rgba(49,4,52,.96));
+  color:#fff0d2;font-family:'Cormorant Garamond',Georgia,serif;font-size:19px;letter-spacing:.01em;
+  box-shadow:0 0 0 2px rgba(255,222,136,.13),0 0 24px rgba(255,191,76,.25),inset 0 1px rgba(255,255,255,.15);animation:goldBreath 4s ease-in-out infinite;
+}
+body.countdown-mode .scene.home .primary-button span {font-size:24px;color:#ffe29a}
+body.countdown-mode .scene.home .signature {order:6;margin:0 0 8px;max-width:55%;color:#f3dced;font-family:'Cormorant Garamond',Georgia,serif;font-size:13px;text-align:center}
+body.countdown-mode .scene.home .chapter-counter {order:7;max-width:55%;color:#e7cfe6;font-size:9px;letter-spacing:.22em;text-align:center}
+body.countdown-mode .scene.home .text-button,body.countdown-mode .scene.home .progress {order:8}
+body.countdown-mode .scene.home .text-button {color:#ffe6a0}
+@keyframes tileShimmer {0%,72%,100%{transform:translateX(-120%)}85%{transform:translateX(120%)}}
+@keyframes goldBreath {0%,100%{box-shadow:0 0 0 2px rgba(255,222,136,.13),0 0 18px rgba(255,191,76,.2),inset 0 1px rgba(255,255,255,.15)}50%{box-shadow:0 0 0 2px rgba(255,222,136,.2),0 0 30px rgba(255,191,76,.42),inset 0 1px rgba(255,255,255,.2)}}
+@keyframes referenceReveal {from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+body.countdown-mode .ambient-particles {z-index:0}
+@media(max-width:420px) {
+  body.countdown-mode .app-shell {padding:clamp(38px,7vh,65px) 29px 30px}
+  body.countdown-mode:before {inset:13px;border-radius:22px}
+  body.countdown-mode .scene.home h1 {max-width:70%;font-size:clamp(48px,13.5vw,68px);margin-bottom:22px}
+  body.countdown-mode .scene.home .hint {max-width:55%;font-size:clamp(19px,5.4vw,24px)}
+  body.countdown-mode .scene.home .countdown {width:min(62vw,420px);gap:5px;margin-bottom:22px}
+  body.countdown-mode .scene.home .time-unit {min-height:88px;border-radius:14px}
+  body.countdown-mode .scene.home .time-unit strong {font-size:clamp(30px,8.7vw,39px)}
+  body.countdown-mode .scene.home .time-unit span {font-size:10px}
+  body.countdown-mode .scene.home .body {max-width:60%;font-size:clamp(17px,4.6vw,21px)}
+  body.countdown-mode .scene.home .primary-button {max-width:58%;font-size:17px;min-height:46px}
+}
+@media(max-height:740px) {
+  body.countdown-mode .app-shell {padding-top:35px;padding-bottom:24px}
+  body.countdown-mode .scene.home h1 {font-size:clamp(44px,11vw,62px);margin-bottom:17px}
+  body.countdown-mode .scene.home .hint {margin-bottom:13px}
+  body.countdown-mode .scene.home .time-unit {min-height:76px}
+  body.countdown-mode .scene.home .countdown {margin-bottom:17px}
+  body.countdown-mode .scene.home .body {font-size:18px;margin-bottom:14px}
+}
+@media(prefers-reduced-motion:reduce) {
+  body.countdown-mode .scene.home .time-unit:after,body.countdown-mode .scene.home .primary-button {animation:none!important}
+}

@@ -89,7 +89,7 @@ while (true) {
                             LOCK_EX
                         );
                         @chmod($countdownFile, 0600);
-                        $bot->sendMessage($chatId, "Когда наступит твой день, здесь откроется маленькая история из нескольких глав. ❤️\n\nКоманды: /countdown — отсчёт, /story — продолжить историю, /help — помощь.");
+                        $bot->sendMessage($chatId, "Когда наступит твой день, здесь откроется маленькая история из нескольких глав. ❤️\n\nКоманды: /countdown — отсчет, /story — продолжить историю, /help — помощь.");
                     }
                 } elseif ($text === '/countdown') {
                     if (is_file($countdownImage)) {
@@ -107,17 +107,17 @@ while (true) {
                     $bot->sendMessage($chatId, Story::scene($chapter)['text'], Story::keyboard($chapter));
                 } elseif ($text === '/restart') {
                     if (!Story::isBirthdayToday()) {
-                        $bot->sendMessage($chatId, 'История откроется 30 октября. Пока можно следить за обратным отсчётом. ❤️', Countdown::keyboard());
+                        $bot->sendMessage($chatId, 'История откроется 30 октября. Пока можно следить за обратным отсчетом. ❤️', Countdown::keyboard());
                     } else {
                         $progress->reset($chatId);
                         $bot->sendMessage($chatId, Story::scene(Story::PROLOGUE)['text'], Story::keyboard(Story::PROLOGUE));
                     }
                 } elseif ($text === '/test') {
-                    $bot->sendMessage($chatId, "Проверка пройдена! Бот работает. ❤️\n\nИспользуй /countdown для проверки отсчёта.");
+                    $bot->sendMessage($chatId, "Проверка пройдена! Бот работает. ❤️\n\nИспользуй /countdown для проверки отсчета.");
                 } elseif ($text === '/help') {
-                    $bot->sendMessage($chatId, "Команды Happy Day My Love ❤️\n/start — открыть бота\n/countdown — обратный отсчёт\n/story — продолжить историю\n/restart — начать историю заново (30 октября)\n/test — проверить бота\n/help — помощь");
+                    $bot->sendMessage($chatId, "Команды Happy Day My Love ❤️\n/start — открыть бота\n/countdown — обратный отсчет\n/story — продолжить историю\n/restart — начать историю заново (30 октября)\n/test — проверить бота\n/help — помощь");
                 } else {
-                    $bot->sendMessage($chatId, "Моё солнышко, я приготовил для тебя особенную историю. ❤️\n\nОтправь /start, чтобы открыть подарок, или /countdown, чтобы посмотреть отсчёт.");
+                    $bot->sendMessage($chatId, "Мое солнышко, я приготовил для тебя особенную историю. ❤️\n\nОтправь /start, чтобы открыть подарок, или /countdown, чтобы посмотреть отсчет.");
                 }
             }
 
@@ -150,7 +150,7 @@ while (true) {
                             throw $e;
                         }
                     }
-                    $bot->answerCallbackQuery($callbackId, Story::isBirthdayToday() ? 'С днём рождения, моё солнышко! ❤️' : 'Отсчёт обновлён ❤️');
+                    $bot->answerCallbackQuery($callbackId, Story::isBirthdayToday() ? 'С днем рождения, мое солнышко! ❤️' : 'Отсчет обновлен ❤️');
                 } elseif (str_starts_with($data, 'story:') && $callbackChatId !== null) {
                     $requested = substr($data, 6);
                     $valid = [Story::PROLOGUE, Story::CHAPTER_1, Story::CHAPTER_2, Story::CHAPTER_3, Story::LETTER];

@@ -51,12 +51,12 @@
     }
   }
   function showChapter(index) {
-    chapterIndex = index; mode = 'story'; const c = chapters[index];
+    chapterIndex = index; mode = 'story'; const c = chapters[index]; scene.classList.remove('home');
     scene.classList.remove('reveal','letter'); void scene.offsetWidth; if (c.letter) scene.classList.add('letter');
     eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = c.counter; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal');
   }
   function showCountdown() {
-    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'A LITTLE STORY FOR YOU'; title.innerHTML = 'Моё солнышко,<br>это для тебя'; body.textContent = 'Я приготовил для тебя кое-что особенное. Маленькую историю, в которой каждое слово — от сердца.'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>↗</span>'; scene.classList.add('reveal'); updateCountdown();
+    mode = 'countdown'; scene.classList.add('home'); letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'A LITTLE STORY FOR YOU'; title.innerHTML = 'Моё солнышко,<br>это для тебя'; body.textContent = 'Я приготовил для тебя кое-что особенное. Маленькую историю, в которой каждое слово — от сердца.'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>↗</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
     if (mode === 'story' && chapters[chapterIndex].letter) {

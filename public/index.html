@@ -9,36 +9,54 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=14">
+  <link rel="stylesheet" href="./assets/css/style.css?v=16">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#fff4cf"/><stop offset=".5" stop-color="#f1c56e"/><stop offset="1" stop-color="#b9802f"/>
+      </linearGradient>
+    </defs>
+  </svg>
   <main class="poster-screen" id="poster-screen" aria-label="Поздравление для моего солнышка">
-    <div class="poster-frame">
-      <header class="poster-header"><span class="ornament">✦</span><span>С ЛЮБОВЬЮ, ДЛЯ ТЕБЯ</span><span class="ornament">✦</span></header>
-      <div class="poster-layout">
-        <section class="poster-copy" aria-label="Поздравление">
-          <p class="poster-kicker">МОЁ САМОЕ ДОРОГОЕ</p>
-          <h1 class="poster-title">Моё<br>солнышко</h1>
-          <div class="poster-heart" aria-hidden="true">♡</div>
-          <p class="poster-subtitle">До твоего дня рождения<br>осталось</p>
-          <div class="poster-countdown" id="poster-countdown" aria-label="Обратный отсчёт до дня рождения">
-            <div class="poster-time-unit"><strong id="poster-days">--</strong><span>дней</span></div>
-            <div class="poster-time-unit"><strong id="poster-hours">--</strong><span>часов</span></div>
-            <div class="poster-time-unit"><strong id="poster-minutes">--</strong><span>минут</span></div>
-            <div class="poster-time-unit"><strong id="poster-seconds">--</strong><span>секунд</span></div>
-          </div>
-          <p class="poster-message">С каждым днём я всё больше понимаю,<br>как мне повезло, что ты есть в моей жизни <span>♥</span></p>
-          <button class="poster-open-button" id="poster-open" type="button">Открыть сюрприз <span>♡</span></button>
-        </section>
-        <figure class="portrait-card"><img class="poster-art" src="./assets/images/birthday-portrait.jpg" alt="Любимая на фоне горного пейзажа" draggable="false"><figcaption>Ты — моё тепло и свет <span>♥</span></figcaption></figure>
-      </div>
-      <button class="music-toggle" id="music-toggle" type="button" aria-label="Включить музыку" aria-pressed="false"><span class="music-icon">♫</span><span class="music-label">Включить мелодию</span></button>
-      <audio id="background-music" loop preload="none" src="./assets/audio/love-theme.wav"></audio>
-      <footer class="poster-footer">♡ НАВСЕГДА С НЕЖНОСТЬЮ ♡</footer>
+    <div class="poster-stage">
+      <img class="poster-bg" src="./assets/images/birthday-portrait.jpg" alt="" draggable="false">
+      <div class="petals" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <section class="poster-copy" aria-label="Поздравление">
+        <h1 class="poster-title">Моё<br><span>солнышко</span></h1>
+        <svg class="flourish-heart" viewBox="0 0 260 64" aria-hidden="true">
+          <path d="M8 40 C40 40 52 22 76 30 C92 35 88 50 76 46 C68 43 74 34 84 36 C100 40 106 46 112 44" />
+          <path d="M252 40 C220 40 208 22 184 30 C168 35 172 50 184 46 C192 43 186 34 176 36 C160 40 154 46 148 44" />
+          <path class="heart" d="M130 58 C112 44 104 36 104 26 C104 17 111 11 119 11 C124 11 128 14 130 18 C132 14 136 11 141 11 C149 11 156 17 156 26 C156 36 148 44 130 58 Z" />
+          <path class="spark" d="M130 26 L132 32 L138 34 L132 36 L130 42 L128 36 L122 34 L128 32 Z" />
+        </svg>
+        <p class="poster-subtitle">До твоего<br>особенного дня<br>осталось</p>
+        <div class="gold-divider" aria-hidden="true"><span>♥</span></div>
+        <div class="poster-countdown" id="poster-countdown" aria-label="Обратный отсчёт до дня рождения">
+          <div class="poster-time-unit"><strong id="poster-days">--</strong><span id="poster-days-label">дней</span></div>
+          <div class="poster-time-unit"><strong id="poster-hours">--</strong><span id="poster-hours-label">часов</span></div>
+          <div class="poster-time-unit"><strong id="poster-minutes">--</strong><span id="poster-minutes-label">минут</span></div>
+          <div class="poster-time-unit"><strong id="poster-seconds">--</strong><span id="poster-seconds-label">секунд</span></div>
+        </div>
+        <div class="gold-divider" aria-hidden="true"><span>♥</span></div>
+        <p class="poster-message">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span>♥</span></p>
+        <svg class="flourish-infinity" viewBox="0 0 240 30" aria-hidden="true">
+          <path d="M4 15 C40 15 70 15 96 15 C108 15 112 5 120 5 C130 5 130 25 120 25 C110 25 110 5 120 5 M120 25 C128 25 132 15 144 15 C170 15 200 15 236 15" />
+        </svg>
+        <button class="poster-open-button" id="poster-open" type="button">Открыть сюрприз <span>♡</span></button>
+      </section>
     </div>
   </main>
-  <div class="sparkles app-sparkles" aria-hidden="true"></div>
+  <div class="sparkles" aria-hidden="true"></div>
+  <button class="music-toggle" id="music-toggle" type="button" aria-label="Включить песню" aria-pressed="false">
+    <span class="music-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="music-text"><b>С днём рождения, милая</b><small id="music-state">Нажми, чтобы включить</small></span>
+  </button>
+  <audio id="background-music" loop preload="metadata">
+    <source src="./assets/audio/birthday-song.m4a" type="audio/mp4">
+  </audio>
   <main class="app-shell story-shell" id="story-shell" hidden>
     <section class="scene" id="scene" aria-live="polite">
       <div class="content" id="content">
@@ -47,10 +65,10 @@
         <div class="title-heart" aria-hidden="true">♡</div>
         <p class="body" id="body">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span></p>
         <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
-          <div class="time-unit"><strong id="days">--</strong><span>ДНЕЙ</span></div>
-          <div class="time-unit"><strong id="hours">--</strong><span>ЧАСА</span></div>
-          <div class="time-unit"><strong id="minutes">--</strong><span>МИНУТ</span></div>
-          <div class="time-unit"><strong id="seconds">--</strong><span>СЕКУНД</span></div>
+          <div class="time-unit"><strong id="days">--</strong><span id="days-label">дней</span></div>
+          <div class="time-unit"><strong id="hours">--</strong><span id="hours-label">часа</span></div>
+          <div class="time-unit"><strong id="minutes">--</strong><span id="minutes-label">минут</span></div>
+          <div class="time-unit"><strong id="seconds">--</strong><span id="seconds-label">секунд</span></div>
         </div>
         <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
         <button class="primary-button" id="next" type="button">Открыть сюрприз <span>♡</span></button>
@@ -62,6 +80,6 @@
       </div>
     </section>
   </main>
-  <script src="./assets/js/app.js?v=14" defer></script>
+  <script src="./assets/js/app.js?v=16" defer></script>
 </body>
 </html>

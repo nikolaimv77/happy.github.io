@@ -1,17 +1,27 @@
 (() => {
   'use strict';
   const tg = window.Telegram?.WebApp;
-  if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#390038'); tg.setBackgroundColor('#390038'); } catch (_) {} }
+  if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#2a0029'); tg.setBackgroundColor('#2a0029'); } catch (_) {} }
   const $ = (id) => document.getElementById(id);
   const poster = $('poster-screen'), storyShell = $('story-shell'), posterOpen = $('poster-open');
   function openStoryApp() { if (poster) poster.hidden = true; if (storyShell) storyShell.hidden = false; }
-  if (posterOpen) posterOpen.addEventListener('click', () => { openStoryApp(); showChapter(0); });
-  const musicButton = $('music-toggle'), music = $('background-music');
+  if (posterOpen) posterOpen.addEventListener('click', () => { openStoryApp(); showChapter(0); if (music && music.paused) playMusic(); });
+  const musicButton = $('music-toggle'), music = $('background-music'), musicState = $('music-state');
+  function syncMusic() {
+    if (!musicButton || !music) return;
+    const playing = !music.paused;
+    musicButton.setAttribute('aria-pressed', String(playing));
+    musicButton.setAttribute('aria-label', playing ? 'Выключить песню' : 'Включить песню');
+    if (musicState) musicState.textContent = playing ? 'Играет · нажми, чтобы выключить' : 'Нажми, чтобы включить';
+  }
+  async function playMusic() {
+    if (!music) return;
+    try { music.volume = 0.85; await music.play(); } catch (_) { if (musicState) musicState.textContent = 'Нажми ещё раз'; }
+    syncMusic();
+  }
   if (musicButton && music) {
-    musicButton.addEventListener('click', async () => {
-      if (music.paused) { try { await music.play(); musicButton.setAttribute('aria-pressed','true'); musicButton.setAttribute('aria-label','Выключить музыку'); } catch (_) { musicButton.setAttribute('aria-label','Нажмите ещё раз для включения музыки'); } }
-      else { music.pause(); musicButton.setAttribute('aria-pressed','false'); musicButton.setAttribute('aria-label','Включить музыку'); }
-    });
+    musicButton.addEventListener('click', () => { if (music.paused) playMusic(); else { music.pause(); syncMusic(); } });
+    music.addEventListener('play', syncMusic); music.addEventListener('pause', syncMusic);
   }
   const scene = $('scene'), eyebrow = $('eyebrow'), title = $('title'), body = $('body'), next = $('next'), back = $('back'), counter = $('counter'), hint = $('hint'), countdown = $('countdown'), progress = $('progress'), fill = $('progress-fill'), signature = $('signature'), letterStage = $('letter-stage'), envelope = $('envelope');
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
@@ -25,6 +35,8 @@
   ];
   let mode = 'countdown', chapterIndex = 0, letterOpened = false;
   const isBirthday = () => { const now = new Date(); return now >= target && now < new Date('2026-10-31T00:00:00+05:00'); };
+  const unitWords = {days:['день','дня','дней'], hours:['час','часа','часов'], minutes:['минута','минуты','минут'], seconds:['секунда','секунды','секунд']};
+  const plural = (n, w) => { const a = n % 100, b = n % 10; if (a > 10 && a < 20) return w[2]; if (b === 1) return w[0]; if (b > 1 && b < 5) return w[1]; return w[2]; };
   function updateCountdown() {
     const now = Date.now(); let diff = Math.max(0, target.getTime() - now);
     const days = Math.floor(diff / 86400000); diff %= 86400000;
@@ -34,6 +46,8 @@
     for (const [key, value] of Object.entries(values)) {
       const node = $(key); if (node) node.textContent = String(value).padStart(2, '0');
       const posterNode = $('poster-' + key); if (posterNode) posterNode.textContent = String(value).padStart(2, '0');
+      const label = plural(value, unitWords[key]);
+      for (const id of [key + '-label', 'poster-' + key + '-label']) { const l = $(id); if (l) l.textContent = label; }
     }
     if (Date.now() >= target.getTime()) {
       const posterEyebrow = $('eyebrow');

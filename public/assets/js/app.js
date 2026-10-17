@@ -3,36 +3,16 @@
   const tg = window.Telegram?.WebApp;
   if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#390038'); tg.setBackgroundColor('#390038'); } catch (_) {} }
   const $ = (id) => document.getElementById(id);
-  // Music starts only after the visitor taps the control, as required by mobile browsers.
-  const music = $('background-music');
-  const musicToggle = $('music-toggle');
-  if (music && musicToggle) {
-    music.volume = 0.32;
-    musicToggle.addEventListener('click', async () => {
-      if (music.paused) {
-        try {
-          await music.play();
-          musicToggle.classList.add('is-playing');
-          musicToggle.setAttribute('aria-pressed', 'true');
-          musicToggle.setAttribute('aria-label', 'Выключить романтическую музыку');
-          musicToggle.title = 'Выключить музыку';
-        } catch (_) {
-          musicToggle.classList.remove('is-playing');
-          musicToggle.setAttribute('aria-pressed', 'false');
-          musicToggle.title = 'Нажмите, чтобы включить музыку';
-        }
-      } else {
-        music.pause();
-        musicToggle.classList.remove('is-playing');
-        musicToggle.setAttribute('aria-pressed', 'false');
-        musicToggle.setAttribute('aria-label', 'Включить романтическую музыку');
-        musicToggle.title = 'Включить музыку';
-      }
-    });
-  }
   const poster = $('poster-screen'), storyShell = $('story-shell'), posterOpen = $('poster-open');
   function openStoryApp() { if (poster) poster.hidden = true; if (storyShell) storyShell.hidden = false; }
-  if (posterOpen) posterOpen.addEventListener('click', () => { openStoryApp(); if (next) next.click(); });
+  if (posterOpen) posterOpen.addEventListener('click', () => { openStoryApp(); showChapter(0); });
+  const musicButton = $('music-toggle'), music = $('background-music');
+  if (musicButton && music) {
+    musicButton.addEventListener('click', async () => {
+      if (music.paused) { try { await music.play(); musicButton.setAttribute('aria-pressed','true'); musicButton.setAttribute('aria-label','Выключить музыку'); } catch (_) { musicButton.setAttribute('aria-label','Нажмите ещё раз для включения музыки'); } }
+      else { music.pause(); musicButton.setAttribute('aria-pressed','false'); musicButton.setAttribute('aria-label','Включить музыку'); }
+    });
+  }
   const scene = $('scene'), eyebrow = $('eyebrow'), title = $('title'), body = $('body'), next = $('next'), back = $('back'), counter = $('counter'), hint = $('hint'), countdown = $('countdown'), progress = $('progress'), fill = $('progress-fill'), signature = $('signature'), letterStage = $('letter-stage'), envelope = $('envelope');
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
   const target = new Date('2026-10-30T00:00:00+05:00');
@@ -50,9 +30,17 @@
     const days = Math.floor(diff / 86400000); diff %= 86400000;
     const hours = Math.floor(diff / 3600000); diff %= 3600000;
     const minutes = Math.floor(diff / 60000); const seconds = Math.floor((diff % 60000) / 1000);
-    $('days').textContent = String(days).padStart(2,'0'); $('hours').textContent = String(hours).padStart(2,'0'); $('minutes').textContent = String(minutes).padStart(2,'0'); $('seconds').textContent = String(seconds).padStart(2,'0');
+    const values = {days, hours, minutes, seconds};
+    for (const [key, value] of Object.entries(values)) {
+      const node = $(key); if (node) node.textContent = String(value).padStart(2, '0');
+      const posterNode = $('poster-' + key); if (posterNode) posterNode.textContent = String(value).padStart(2, '0');
+    }
     if (Date.now() >= target.getTime()) {
-      eyebrow.textContent = '30 ОКТЯБРЯ · ТВОЙ ОСОБЕННЫЙ ДЕНЬ'; title.innerHTML = 'С днём рождения,<br>моё солнышко'; body.textContent = 'Сегодня я хочу подарить тебе несколько слов, которые идут от сердца. Эта маленькая история создана специально для тебя.'; hint.textContent = 'Сегодня всё это — для тебя ❤️'; next.innerHTML = 'Начать нашу историю <span>↗</span>'; countdown.hidden = true;
+      const posterEyebrow = $('eyebrow');
+      if (posterEyebrow) posterEyebrow.textContent = 'С ДНЁМ РОЖДЕНИЯ, МОЁ СОЛНЫШКО';
+      if (eyebrow) eyebrow.textContent = '30 ОКТЯБРЯ · ТВОЙ ОСОБЕННЫЙ ДЕНЬ';
+      if (hint) hint.textContent = 'Сегодня всё это — для тебя ❤️';
+      if (next) next.innerHTML = 'Начать поздравление <span>↗</span>';
     }
   }
   function showChapter(index) {
@@ -61,7 +49,7 @@
     eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = c.counter; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal');
   }
   function showCountdown() {
-    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ДНЯ РОЖДЕНИЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
+    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
     if (mode === 'story' && chapters[chapterIndex].letter) {
@@ -77,5 +65,7 @@
   back.addEventListener('click', showCountdown);
   updateCountdown(); setInterval(updateCountdown, 1000);
   // If opened through a Telegram deep link with ?story=1, start at the story screen.
-  if ((new URLSearchParams(location.search).get('story') === '1' && Date.now() >= target.getTime()) || (previewMode && new URLSearchParams(location.search).get('story') === '1')) openStoryApp(); showChapter(0);
+  const params = new URLSearchParams(location.search);
+  if (params.get('story') === '1' || (previewMode && params.get('preview') === '1' && params.get('story') === '1')) { openStoryApp(); showCountdown(); }
+  else { showCountdown(); }
 })();

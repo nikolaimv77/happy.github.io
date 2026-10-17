@@ -8,22 +8,28 @@
   <title>Happy Day My Love</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Great+Vibes&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./assets/css/style.css?v=11">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
   <main class="poster-screen" id="poster-screen" aria-label="Поздравление для моего солнышка">
-    <img class="poster-art" src="./assets/images/reference-countdown.jpg" alt="Моё солнышко. До твоего дня рождения осталось. С каждым днём я всё больше понимаю, как мне повезло, что ты есть в моей жизни." draggable="false">
-    <button class="poster-hotspot" id="poster-open" type="button" aria-label="Открыть сюрприз"></button>
+    <img class="poster-art" src="./assets/images/reference-countdown.jpg" alt="Моё солнышко. До твоего особенного дня осталось. С каждым днём я всё больше понимаю, как мне повезло, что ты есть в моей жизни." draggable="false">
+    <div class="poster-countdown" id="poster-countdown" aria-label="Обратный отсчёт до дня рождения">
+      <div class="poster-time-unit"><strong id="poster-days">--</strong><span>ДНЕЙ</span></div>
+      <div class="poster-time-unit"><strong id="poster-hours">--</strong><span>ЧАСА</span></div>
+      <div class="poster-time-unit"><strong id="poster-minutes">--</strong><span>МИНУТ</span></div>
+      <div class="poster-time-unit"><strong id="poster-seconds">--</strong><span>СЕКУНД</span></div>
+    </div>
+    <button class="poster-open-button" id="poster-open" type="button">Открыть сюрприз <span>♡</span></button>
+    <button class="music-toggle" id="music-toggle" type="button" aria-label="Включить музыку" aria-pressed="false">♫</button>
+    <audio id="background-music" loop preload="none" src="./assets/audio/romantic-piano.wav"></audio>
   </main>
-  <button class="music-toggle" id="music-toggle" type="button" aria-label="Включить романтическую музыку" aria-pressed="false" title="Включить музыку"><span class="music-icon" aria-hidden="true">♫</span><span class="music-label">Музыка</span></button>
-  <audio id="background-music" src="./assets/audio/romantic-piano.wav" preload="none" loop></audio>
   <div class="sparkles app-sparkles" aria-hidden="true"></div>
   <main class="app-shell story-shell" id="story-shell" hidden>
     <section class="scene" id="scene" aria-live="polite">
       <div class="content" id="content">
-        <p class="eyebrow" id="eyebrow">ДО ТВОЕГО ДНЯ РОЖДЕНИЯ ОСТАЛОСЬ</p>
+        <p class="eyebrow" id="eyebrow">ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ</p>
         <h1 id="title">Моё<br>солнышко</h1>
         <div class="title-heart" aria-hidden="true">♡</div>
         <p class="body" id="body">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span></p>
@@ -33,7 +39,7 @@
           <div class="time-unit"><strong id="minutes">--</strong><span>МИНУТ</span></div>
           <div class="time-unit"><strong id="seconds">--</strong><span>СЕКУНД</span></div>
         </div>
-        <p class="hint" id="hint">До твоего дня рождения · 30 октября</p>
+        <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
         <button class="primary-button" id="next" type="button">Открыть сюрприз <span>♡</span></button>
         <button class="text-button" id="back" type="button" hidden>← Вернуться к отсчёту</button>
         <div class="letter-stage" id="letter-stage" hidden aria-label="Конверт с письмом"><div class="envelope" id="envelope"><div class="envelope-back"></div><div class="letter-paper"><span>Моему солнышку</span><b>♥</b></div><div class="envelope-front"></div><div class="envelope-flap"></div><span class="wax-seal">♥</span></div><p class="envelope-caption">Для тебя — от всего сердца</p></div>

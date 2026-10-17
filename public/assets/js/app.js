@@ -120,10 +120,10 @@
   function showChapter(index) {
     chapterIndex = index; mode = 'story'; const c = chapters[index];
     scene.classList.remove('reveal','letter'); void scene.offsetWidth; if (c.letter) scene.classList.add('letter');
-    eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(chapters.length).padStart(2, '0'); gallery.hidden = !c.gallery; reasonsBox.hidden = !c.reasons; secretHeart.hidden = true; window.clearTimeout(typingTimer); if (c.gallery) gallery.querySelector('.gallery-track').scrollLeft = 0; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal');
+    eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(chapters.length).padStart(2, '0'); gallery.hidden = !c.gallery; reasonsBox.hidden = !c.reasons; secretHeart.hidden = true; window.clearTimeout(typingTimer); if (c.gallery) gallery.querySelector('.gallery-track').scrollLeft = 0; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal'); placeHeart(index);
   }
   function showCountdown() {
-    mode = 'countdown'; gallery.hidden = true; reasonsBox.hidden = true; secretHeart.hidden = true; window.clearTimeout(typingTimer); letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
+    mode = 'countdown'; placeHeart(-1); gallery.hidden = true; reasonsBox.hidden = true; secretHeart.hidden = true; window.clearTimeout(typingTimer); letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
     burstFrom(next);
@@ -203,6 +203,8 @@
     if (!lightbox.hidden) { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') showPhoto(lbIndex + 1); if (e.key === 'ArrowLeft') showPhoto(lbIndex - 1); }
     else if (!secret.hidden && e.key === 'Escape') closeSecret();
     else if (!waitScreen.hidden && e.key === 'Escape') closeWait();
+    else if (!future.hidden && e.key === 'Escape') closeFuture();
+    else if (!bonus.hidden && e.key === 'Escape') closeBonus();
     else if (!finale.hidden && e.key === 'Escape') closeFinale();
   });
 
@@ -262,6 +264,59 @@
   }
   function closeFinale() { finale.hidden = true; document.body.classList.remove('no-scroll'); cancelAnimationFrame(fwFrame); ctx.clearRect(0, 0, innerWidth, innerHeight); }
   window.addEventListener('resize', () => { if (!finale.hidden) sizeCanvas(); });
+  // ---------- «Найди сердечки»: по одному в главах I–V ----------
+  const heartSpots = [
+    {top:'14%', left:'7%'}, {top:'52%', left:'90%'}, {top:'86%', left:'10%'}, {top:'9%', left:'84%'}, {top:'64%', left:'4%'}
+  ];
+  const HEARTS_KEY = 'solnce-hearts-2026';
+  const hiddenHeart = $('hidden-heart'), heartsBadge = $('hearts-badge'), heartsDots = $('hearts-dots'), heartsText = $('hearts-text'), bonus = $('bonus');
+  let foundHearts = new Set();
+  try { foundHearts = new Set(JSON.parse(localStorage.getItem(HEARTS_KEY) || '[]')); } catch (_) {}
+  function renderHearts() {
+    heartsDots.innerHTML = heartSpots.map((_, i) => `<i class="${foundHearts.has(i) ? 'on' : ''}">♥</i>`).join('');
+    heartsText.textContent = foundHearts.size >= heartSpots.length ? 'Все сердечки найдены — открыть бонус' : `Найди спрятанные сердечки · ${foundHearts.size} из ${heartSpots.length}`;
+    heartsBadge.classList.toggle('complete', foundHearts.size >= heartSpots.length);
+  }
+  function placeHeart(index) {
+    heartsBadge.hidden = index < 0;
+    const spot = heartSpots[index];
+    if (!spot || foundHearts.has(index)) { hiddenHeart.hidden = true; return; }
+    hiddenHeart.hidden = false; hiddenHeart.dataset.index = index; hiddenHeart.classList.remove('caught');
+    hiddenHeart.style.top = spot.top; hiddenHeart.style.left = spot.left;
+  }
+  hiddenHeart.addEventListener('click', (e) => {
+    const i = Number(hiddenHeart.dataset.index); if (foundHearts.has(i)) return;
+    foundHearts.add(i); try { localStorage.setItem(HEARTS_KEY, JSON.stringify([...foundHearts])); } catch (_) {}
+    burst(e.clientX, e.clientY, 12); hiddenHeart.classList.add('caught'); window.setTimeout(() => { if (hiddenHeart.dataset.index === String(i)) hiddenHeart.hidden = true; }, 500);
+    renderHearts(); heartsBadge.classList.remove('pulse'); void heartsBadge.offsetWidth; heartsBadge.classList.add('pulse');
+    if (foundHearts.size >= heartSpots.length) window.setTimeout(openBonus, 700);
+  });
+  function openBonus() { bonus.hidden = false; document.body.classList.add('no-scroll'); burst(innerWidth / 2, innerHeight / 2, 28); confettiRain(60); $('bonus-close').focus(); }
+  function closeBonus() { bonus.hidden = true; document.body.classList.remove('no-scroll'); }
+  heartsBadge.addEventListener('click', () => { if (foundHearts.size >= heartSpots.length) openBonus(); else { heartsBadge.classList.remove('pulse'); void heartsBadge.offsetWidth; heartsBadge.classList.add('pulse'); } });
+  $('bonus-close').addEventListener('click', () => { burstFrom($('bonus-close')); window.setTimeout(closeBonus, 350); });
+  bonus.addEventListener('click', (e) => { if (e.target === bonus) closeBonus(); });
+  renderHearts();
+
+  // ---------- Письмо «Открой через год»: заблокировано до 30.10.2027 00:00 ----------
+  const futureTarget = new Date('2027-10-30T00:00:00+05:00');
+  const future = $('future');
+  function renderFuture() {
+    const open = Date.now() >= futureTarget.getTime() || previewMode;
+    $('future-locked').hidden = open; $('future-text').hidden = !open;
+    $('future-eyebrow').textContent = open ? '30 · 10 · 2027 · ПРОШЁЛ ГОД' : 'ПИСЬМО В БУДУЩЕЕ';
+    $('future-close').innerHTML = open ? 'Обнять тебя <span>♥</span>' : 'Буду ждать <span>♡</span>';
+    if (!open) {
+      const diff = futureTarget.getTime() - Date.now(), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000);
+      $('future-left').textContent = 'Откроется через ' + d + ' ' + plural(d, unitWords.days) + (h ? ' ' + h + ' ' + plural(h, unitWords.hours) : '');
+    }
+  }
+  function openFuture() { renderFuture(); future.hidden = false; $('future-close').focus(); }
+  function closeFuture() { future.hidden = true; }
+  $('finale-future').addEventListener('click', openFuture);
+  $('future-close').addEventListener('click', closeFuture);
+  future.addEventListener('click', (e) => { if (e.target === future) closeFuture(); });
+
   $('finale-again').addEventListener('click', (e) => { salvo(); burst(e.clientX, e.clientY, 16); });
   $('finale-restart').addEventListener('click', () => { closeFinale(); showChapter(0); window.scrollTo({top:0, behavior:'smooth'}); });
   canvas.addEventListener('click', (e) => launch(e.clientX));

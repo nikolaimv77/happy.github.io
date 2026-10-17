@@ -113,3 +113,64 @@ footer{color:#d3b8e5}
 @media(prefers-reduced-motion:reduce){
  .scene:after,.heart,.heart-orbit,.spark,.primary-button,.primary-button:before,h1,.glow,.ambient-particle{animation:none!important}
 }
+
+/* FINAL PALETTE OVERRIDE — LILAC / VIOLET / GOLD (avoid pink cast) */
+:root{
+  --bg:#e8ddff;
+  --panel:rgba(250,247,255,.86);
+  --text:#302044;
+  --muted:#66527f;
+  --gold:#b8872d;
+  --gold2:#f2d58b;
+  --lilac:#9670e8;
+  --pink:#b7a0f5;
+}
+body{
+  background:
+    radial-gradient(ellipse at 12% 18%,rgba(164,126,238,.45),transparent 36%),
+    radial-gradient(ellipse at 86% 72%,rgba(195,169,255,.45),transparent 34%),
+    radial-gradient(ellipse at 52% 110%,rgba(242,213,139,.20),transparent 38%),
+    linear-gradient(135deg,#e9ddff 0%,#d8c7fa 35%,#f4efff 68%,#cbb5f3 100%);
+  background-size:160% 160%;
+  animation:lilacAurora 20s ease-in-out infinite alternate;
+  color:var(--text);
+}
+.scene{
+  border:1px solid rgba(184,135,45,.52);
+  background:linear-gradient(145deg,rgba(255,253,255,.91),rgba(237,227,255,.88));
+  box-shadow:0 28px 85px rgba(76,47,126,.20),0 0 38px rgba(150,112,232,.15),inset 0 1px rgba(255,255,255,.95);
+}
+.scene:before{background:linear-gradient(90deg,transparent,#f2d58b,#b9a0f4,transparent)}
+.brand{color:#5d477d;text-shadow:0 0 18px rgba(150,112,232,.22)}
+.brand b,.brand-mark,.brand-heart,.spark{color:#b8872d}
+.eyebrow{color:#9a7125;text-shadow:0 0 14px rgba(242,213,139,.25)}
+h1{color:#35224e;text-shadow:0 0 25px rgba(150,112,232,.16)}
+.body{color:#66527f}
+.heart{color:#c3a8ff;text-shadow:0 0 12px #b69af5,0 0 28px #9670e8,0 0 48px rgba(242,213,139,.7)}
+.heart-orbit{border-color:rgba(150,112,232,.38);box-shadow:0 0 20px rgba(150,112,232,.12)}
+.orbit-two{border-color:rgba(184,135,45,.42)}
+.time-unit strong{color:#a77925;text-shadow:0 0 18px rgba(242,213,139,.34)}
+.time-unit span,.hint,.signature,.chapter-counter{color:#79658f}
+.countdown i{color:#a88bdd}
+.primary-button{
+  border:1px solid #e3c16c;
+  background:linear-gradient(110deg,#f5df9b 0%,#cbb4fb 38%,#9d7ae8 70%,#ead39a 100%);
+  background-size:220% 100%;color:#302044;
+  box-shadow:0 10px 34px rgba(122,86,190,.24),0 0 24px rgba(242,213,139,.18);
+}
+.text-button{color:#7754a3}
+.progress{background:rgba(105,76,148,.12)}
+.progress span{background:linear-gradient(90deg,#9670e8,#d9c8ff,#f2d58b,#8b68d4);box-shadow:0 0 12px rgba(184,135,45,.55)}
+footer{color:#78658d}
+.glow-one{background:#9670e8}.glow-two{background:#e5c36f}
+.stars,.stars:before,.stars:after{background-image:radial-gradient(1px 1px at 10% 20%,#fff 98%,transparent),radial-gradient(2px 2px at 80% 13%,#e8d7a1 98%,transparent),radial-gradient(1px 1px at 60% 70%,#fff 98%,transparent),radial-gradient(1px 1px at 28% 82%,#c6b0ff 98%,transparent),radial-gradient(1px 1px at 90% 55%,#fff 98%,transparent)}
+.letter-paper{background:linear-gradient(160deg,#fffdf5,#eee5ff);color:#76518e}
+.envelope-back{background:linear-gradient(145deg,#bda2f3,#8860cb)}
+.envelope-front{background:linear-gradient(145deg,#a887ec,#6f4ba9)}
+.envelope-flap{background:linear-gradient(160deg,#e6dcff,#aa8ce7)}
+.envelope-caption{color:#71538f}
+.scene.letter .body{background:rgba(246,241,255,.9);border-color:rgba(184,135,45,.35);color:#49345f}
+.signature span{color:#b8872d;text-shadow:0 0 12px rgba(242,213,139,.7)}
+.ambient-particle{color:var(--particle-color);text-shadow:0 0 12px currentColor}
+@keyframes lilacAurora{0%{background-position:0% 15%}50%{background-position:70% 80%}100%{background-position:100% 20%}}
+@media(prefers-reduced-motion:reduce){body{animation:none!important}}

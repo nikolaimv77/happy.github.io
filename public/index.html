@@ -6,10 +6,18 @@
   <meta name="theme-color" content="#390038">
   <meta name="description" content="Для моего солнышка — с любовью.">
   <title>Happy Day My Love</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Моё солнышко ♥">
+  <meta property="og:description" content="Маленький сюрприз ко дню рождения — открой, когда будешь одна и в хорошем настроении.">
+  <meta property="og:image" content="https://nikolaimv77.github.io/happy.github.io/assets/images/birthday-portrait.jpg">
+  <meta property="og:image:width" content="864">
+  <meta property="og:image:height" content="1536">
+  <meta property="og:url" content="https://nikolaimv77.github.io/happy.github.io/">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=17">
+  <link rel="stylesheet" href="./assets/css/style.css?v=19">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -34,6 +42,15 @@
         </svg>
         <p class="poster-subtitle" id="poster-subtitle">До твоего<br>особенного дня<br>осталось</p>
         <div class="gold-divider" aria-hidden="true"><span>♥</span></div>
+        <div class="cake" id="cake" hidden>
+          <div class="candles">
+            <button class="candle" type="button" aria-label="Задуть свечу"><i class="flame"></i></button>
+            <button class="candle" type="button" aria-label="Задуть свечу"><i class="flame"></i></button>
+            <button class="candle" type="button" aria-label="Задуть свечу"><i class="flame"></i></button>
+          </div>
+          <div class="cake-body" aria-hidden="true"></div>
+          <p class="cake-hint" id="cake-hint">Загадай желание и задуй свечи</p>
+        </div>
         <div class="poster-countdown" id="poster-countdown" aria-label="Обратный отсчёт до дня рождения">
           <div class="poster-time-unit"><strong id="poster-days">--</strong><span id="poster-days-label">дней</span></div>
           <div class="poster-time-unit"><strong id="poster-hours">--</strong><span id="poster-hours-label">часов</span></div>
@@ -52,7 +69,7 @@
   <div class="sparkles" aria-hidden="true"></div>
   <button class="music-toggle" id="music-toggle" type="button" aria-label="Включить песню" aria-pressed="false">
     <span class="music-icon" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-    <span class="music-text"><b>С днём рождения, милая</b><small id="music-state">Нажми, чтобы включить</small></span>
+    <span class="music-text"><b>С днём рождения, милая</b><small id="music-state">Нажми, чтобы включить</small><span class="music-progress"><span id="music-bar"></span></span></span>
   </button>
   <audio id="background-music" loop preload="metadata">
     <source src="./assets/audio/birthday-song.m4a" type="audio/mp4">
@@ -80,6 +97,13 @@
         <p class="hint" id="hint">До твоего особенного дня · 30 октября</p>
         <button class="primary-button" id="next" type="button">Открыть сюрприз <span>♡</span></button>
         <button class="text-button" id="back" type="button" hidden>← Вернуться к отсчёту</button>
+        <div class="gallery" id="gallery" hidden>
+          <div class="gallery-track" id="gallery-track"></div>
+          <div class="gallery-dots" id="gallery-dots"></div>
+          <p class="gallery-hint">Листай и нажми на фото, чтобы открыть</p>
+        </div>
+        <div class="reasons" id="reasons" hidden></div>
+        <button class="secret-heart" id="secret-heart" type="button" hidden aria-label="Открыть секрет">♥<span>есть ещё кое-что…</span></button>
         <div class="letter-stage" id="letter-stage" hidden aria-label="Конверт с письмом"><div class="envelope" id="envelope"><div class="envelope-back"></div><div class="letter-paper"><span>Моему солнышку</span><b>♥</b></div><div class="envelope-front"></div><div class="envelope-flap"></div><span class="wax-seal">♥</span></div><p class="envelope-caption">Для тебя — от всего сердца</p></div>
         <div class="progress" id="progress" hidden><span id="progress-fill"></span></div>
         <p class="signature" id="signature">С любовью, для тебя <span>♥</span></p>
@@ -87,6 +111,26 @@
       </div>
     </section>
   </main>
-  <script src="./assets/js/app.js?v=17" defer></script>
+  <div class="lock-note" id="lock-note" hidden role="status">
+    <b>🔒 Сюрприз ещё спит</b>
+    <span>Он откроется 30 октября ровно в 00:00 — тебе придёт уведомление в Telegram ♥</span>
+  </div>
+  <div class="lightbox" id="lightbox" hidden role="dialog" aria-modal="true" aria-label="Просмотр фото">
+    <button class="lightbox-close" id="lightbox-close" type="button" aria-label="Закрыть">×</button>
+    <button class="lightbox-nav prev" id="lightbox-prev" type="button" aria-label="Предыдущее фото">‹</button>
+    <figure class="lightbox-figure"><img id="lightbox-img" alt=""><figcaption id="lightbox-caption"></figcaption></figure>
+    <button class="lightbox-nav next" id="lightbox-next" type="button" aria-label="Следующее фото">›</button>
+    <p class="lightbox-count" id="lightbox-count"></p>
+  </div>
+  <div class="secret" id="secret" hidden role="dialog" aria-modal="true" aria-label="Тайное послание">
+    <div class="secret-card">
+      <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span><span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
+      <p class="eyebrow">ТОЛЬКО ДЛЯ ТЕБЯ</p>
+      <h2>P.S.</h2>
+      <p class="secret-text">Если ты дочитала до этого места — знай: каждое слово здесь правда.<br><br>Я загадал одно желание: чтобы через год мы снова открыли эту страничку вместе и улыбнулись тому, сколько всего хорошего успело случиться.<br><br>Люблю тебя, моё солнышко.</p>
+      <button class="primary-button" id="secret-close" type="button">Обнять в ответ <span>♥</span></button>
+    </div>
+  </div>
+  <script src="./assets/js/app.js?v=19" defer></script>
 </body>
 </html>

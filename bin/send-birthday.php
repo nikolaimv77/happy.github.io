@@ -52,7 +52,14 @@ if (!$dryRun && is_file($sentMarker)) {
 $progress = new StoryProgress($storage . '/story-progress.json');
 $bot = new TelegramBot($token);
 $birthdayText = App\Countdown::birthdayMessage();
-$birthdayKeyboard = ['inline_keyboard' => [[['text' => '🎬 Начать нашу историю', 'callback_data' => 'story:prologue']]]];
+$miniAppUrl = trim((string) ($_ENV['MINI_APP_URL'] ?? ''));
+$birthdayRows = [];
+if ($miniAppUrl !== '') {
+    // Opens the surprise Mini App; the page itself unlocks at 30.10 00:00.
+    $birthdayRows[] = [['text' => '🎁 Открыть сюрприз', 'web_app' => ['url' => $miniAppUrl]]];
+}
+$birthdayRows[] = [['text' => '🎬 Начать нашу историю', 'callback_data' => 'story:prologue']];
+$birthdayKeyboard = ['inline_keyboard' => $birthdayRows];
 $countdownFile = $storage . '/countdown-message.json';
 $countdown = is_file($countdownFile)
     ? json_decode((string) file_get_contents($countdownFile), true)

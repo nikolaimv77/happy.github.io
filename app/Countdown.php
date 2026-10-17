@@ -77,6 +77,25 @@ final class Countdown
             . "Когда будешь готова, нажми кнопку ниже. Я хочу рассказать тебе всё это в твоём темпе. ❤️";
     }
 
+    /** Keyboard for the birthday notification: opens the Mini App surprise first. */
+    public static function birthdayKeyboard(): array
+    {
+        $rows = [];
+        $miniAppUrl = trim((string) ($_ENV['MINI_APP_URL'] ?? ''));
+        if ($miniAppUrl !== '' && filter_var($miniAppUrl, FILTER_VALIDATE_URL) && str_starts_with(strtolower($miniAppUrl), 'https://')) {
+            $rows[] = [['text' => '🎁 Открыть сюрприз', 'web_app' => ['url' => $miniAppUrl]]];
+        }
+        $rows[] = [['text' => '🎬 Начать нашу историю', 'callback_data' => 'story:prologue']];
+
+        return ['inline_keyboard' => $rows];
+    }
+
+    /** Shared marker so the bot loop and bin/send-birthday.php never notify twice. */
+    public static function birthdaySentMarker(string $storage): string
+    {
+        return $storage . '/birthday-sent-' . date('Y') . '.json';
+    }
+
     public static function keyboard(): array
     {
         $rows = [];

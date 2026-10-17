@@ -43,7 +43,7 @@ if (!$dryRun && ((int) $now->format('n') !== $month || (int) $now->format('j') !
     exit(1);
 }
 
-$sentMarker = $storage . '/birthday-sent-' . $now->format('Y') . '.json';
+$sentMarker = App\Countdown::birthdaySentMarker($storage);
 if (!$dryRun && is_file($sentMarker)) {
     echo "Birthday greeting already sent for {$now->format('Y')}; duplicate prevented.\n";
     exit(0);
@@ -52,18 +52,7 @@ if (!$dryRun && is_file($sentMarker)) {
 $progress = new StoryProgress($storage . '/story-progress.json');
 $bot = new TelegramBot($token);
 $birthdayText = App\Countdown::birthdayMessage();
-$miniAppUrl = trim((string) ($_ENV['MINI_APP_URL'] ?? ''));
-$birthdayRows = [];
-if ($miniAppUrl !== '') {
-    // Opens the surprise Mini App; the page itself unlocks at 30.10 00:00.
-    $birthdayRows[] = [['text' => '🎁 Открыть сюрприз', 'web_app' => ['url' => $miniAppUrl]]];
-}
-$birthdayRows[] = [['text' => '🎬 Начать нашу историю', 'callback_data' => 'story:prologue']];
-$birthdayKeyboard = ['inline_keyboard' => $birthdayRows];
-$countdownFile = $storage . '/countdown-message.json';
-$countdown = is_file($countdownFile)
-    ? json_decode((string) file_get_contents($countdownFile), true)
-    : null;
+$birthdayKeyboard = App\Countdown::birthdayKeyboard();
 
 if ($dryRun) {
     printf(
@@ -76,20 +65,8 @@ if ($dryRun) {
     exit(0);
 }
 
-// Prefer replacing the existing countdown message, so the birthday greeting does not arrive twice.
-if (is_array($countdown)
-    && (string) ($countdown['chat_id'] ?? '') === (string) $recipient['chat_id']
-    && !empty($countdown['message_id'])) {
-    try {
-        $bot->editMessageText($recipient['chat_id'], (int) $countdown['message_id'], $birthdayText, $birthdayKeyboard);
-    } catch (Throwable $e) {
-        if (!str_contains($e->getMessage(), 'message is not modified')) {
-            throw $e;
-        }
-    }
-} else {
-    $bot->sendMessage($recipient['chat_id'], $birthdayText, $birthdayKeyboard);
-}
+// Always send a new message: editing the countdown would not trigger a notification.
+$bot->sendMessage($recipient['chat_id'], $birthdayText, $birthdayKeyboard);
 $progress->reset($recipient['chat_id']);
 $marker = [
     'sent_at' => $now->format(DATE_ATOM),

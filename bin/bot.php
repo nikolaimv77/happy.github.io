@@ -141,7 +141,7 @@ while (true) {
                         $isBirthday = Story::isBirthdayToday();
                         $text = $isBirthday ? Countdown::birthdayMessage() : Countdown::message();
                         $keyboard = $isBirthday
-                            ? ['inline_keyboard' => [[['text' => '🎬 Начать нашу историю', 'callback_data' => 'story:prologue']]]]
+                            ? Countdown::birthdayKeyboard()
                             : Countdown::keyboard();
                         $bot->editMessageText($callbackChatId, (int) $messageId, $text, $keyboard);
                     } catch (Throwable $e) {
@@ -171,6 +171,26 @@ while (true) {
             }
         }
 
+        // At midnight send a NEW message: edits are silent, a new message rings the phone.
+        $sentMarker = Countdown::birthdaySentMarker($storage);
+        if (Story::isBirthdayToday() && !is_file($sentMarker) && is_file($recipientFile)) {
+            $recipient = json_decode((string) file_get_contents($recipientFile), true);
+            if (is_array($recipient) && !empty($recipient['chat_id']) && AccessGuard::allows($recipient['user_id'] ?? null)) {
+                try {
+                    $bot->sendMessage($recipient['chat_id'], Countdown::birthdayMessage(), Countdown::birthdayKeyboard());
+                    file_put_contents($sentMarker, json_encode([
+                        'sent_at' => date(DATE_ATOM),
+                        'chat_id' => $recipient['chat_id'],
+                        'by' => 'bot',
+                    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX);
+                    @chmod($sentMarker, 0600);
+                    printf("[%s] Birthday notification sent.\n", date(DATE_ATOM));
+                } catch (Throwable $e) {
+                    fwrite(STDERR, '[' . date(DATE_ATOM) . '] Birthday notification: ' . $e->getMessage() . PHP_EOL);
+                }
+            }
+        }
+
         // Keep the countdown fresh and replace it with the birthday greeting at midnight.
         if (is_file($countdownFile) && time() - $lastCountdownRefresh >= 60) {
             $countdown = json_decode((string) file_get_contents($countdownFile), true);
@@ -179,7 +199,7 @@ while (true) {
                     $isBirthday = Story::isBirthdayToday();
                     $text = $isBirthday ? Countdown::birthdayMessage() : Countdown::message();
                     $keyboard = $isBirthday
-                        ? ['inline_keyboard' => [[['text' => '🎬 Начать нашу историю', 'callback_data' => 'story:prologue']]]]
+                        ? Countdown::birthdayKeyboard()
                         : Countdown::keyboard();
                     $bot->editMessageText(
                         $countdown['chat_id'],

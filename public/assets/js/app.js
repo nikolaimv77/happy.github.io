@@ -158,13 +158,13 @@
 
   // ---------- 1. Галерея ----------
   const photos = [
-    {src:'photo-1.jpg', caption:'Ты смотришь вдаль, а я — на тебя'},
-    {src:'photo-2.jpg', caption:'Сильная и нежная одновременно'},
-    {src:'photo-3.jpg', caption:'Весь мир — у твоих ног'},
-    {src:'photo-4.jpg', caption:'Свободная, как ветер в горах'},
-    {src:'photo-5.jpg', caption:'Моя королева гор'},
-    {src:'photo-6.jpg', caption:'Даже древние башни не так прекрасны'},
-    {src:'photo-7.jpg', caption:'Город в огнях, а самый яркий свет — ты'}
+    {src:'photo-1.webp', caption:'Ты смотришь вдаль, а я — на тебя'},
+    {src:'photo-2.webp', caption:'Сильная и нежная одновременно'},
+    {src:'photo-3.webp', caption:'Весь мир — у твоих ног'},
+    {src:'photo-4.webp', caption:'Свободная, как ветер в горах'},
+    {src:'photo-5.webp', caption:'Моя королева гор'},
+    {src:'photo-6.webp', caption:'Даже древние башни не так прекрасны'},
+    {src:'photo-7.webp', caption:'Город в огнях, а самый яркий свет — ты'}
   ].map((p) => ({...p, src:'./assets/images/gallery/' + p.src}));
   const track = $('gallery-track'), dots = $('gallery-dots');
   photos.forEach((p, i) => {
@@ -186,7 +186,7 @@
 
   const lightbox = $('lightbox'), lbImg = $('lightbox-img'), lbCap = $('lightbox-caption'), lbCount = $('lightbox-count');
   let lbIndex = 0;
-  function showPhoto(i) { lbIndex = (i + photos.length) % photos.length; const p = photos[lbIndex]; lbImg.classList.remove('in'); void lbImg.offsetWidth; lbImg.src = p.src; lbImg.alt = p.caption; lbCap.textContent = p.caption; lbCount.textContent = (lbIndex + 1) + ' / ' + photos.length; lbImg.classList.add('in'); }
+  function showPhoto(i) { lbIndex = (i + photos.length) % photos.length; const p = photos[lbIndex]; new Image().src = photos[(lbIndex + 1) % photos.length].src; lbImg.classList.remove('in'); void lbImg.offsetWidth; lbImg.src = p.src; lbImg.alt = p.caption; lbCap.textContent = p.caption; lbCount.textContent = (lbIndex + 1) + ' / ' + photos.length; lbImg.classList.add('in'); }
   function openLightbox(i) { showPhoto(i); lightbox.hidden = false; document.body.classList.add('no-scroll'); $('lightbox-close').focus(); }
   function closeLightbox() { lightbox.hidden = true; document.body.classList.remove('no-scroll'); }
   $('lightbox-close').addEventListener('click', closeLightbox);
@@ -200,6 +200,7 @@
     if (!lightbox.hidden) { if (e.key === 'Escape') closeLightbox(); if (e.key === 'ArrowRight') showPhoto(lbIndex + 1); if (e.key === 'ArrowLeft') showPhoto(lbIndex - 1); }
     else if (!secret.hidden && e.key === 'Escape') closeSecret();
     else if (!waitScreen.hidden && e.key === 'Escape') closeWait();
+    else if (!finale.hidden && e.key === 'Escape') closeFinale();
   });
 
   // ---------- 4. «Почему я тебя люблю» ----------
@@ -222,7 +223,45 @@
   const secret = $('secret');
   function closeSecret() { secret.hidden = true; document.body.classList.remove('no-scroll'); }
   secretHeart.addEventListener('click', () => { secret.hidden = false; document.body.classList.add('no-scroll'); burst(window.innerWidth / 2, window.innerHeight / 2, 24); $('secret-close').focus(); });
-  $('secret-close').addEventListener('click', () => { burstFrom($('secret-close')); window.setTimeout(closeSecret, 350); });
+  $('secret-close').addEventListener('click', () => { burstFrom($('secret-close')); window.setTimeout(() => { closeSecret(); openFinale(); }, 450); });
+
+  // ---------- Финал: «С днём рождения» на весь экран и салют ----------
+  const finale = $('finale'), canvas = $('fireworks'), ctx = canvas.getContext('2d');
+  const fwColors = ['#f1c56e', '#fff0c2', '#cab3e6', '#af7bbd', '#f7b8e4', '#ffffff'];
+  let rockets = [], sparks = [], fwFrame = 0, fwLaunch = 0, dpr = 1;
+  function sizeCanvas() { dpr = Math.min(2, window.devicePixelRatio || 1); canvas.width = innerWidth * dpr; canvas.height = innerHeight * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+  function launch(x) {
+    const w = innerWidth, h = innerHeight;
+    rockets.push({x: x ?? w * (.15 + Math.random() * .7), y: h, vx: (Math.random() - .5) * 1.2, vy: -(h * .011 + Math.random() * 3), color: fwColors[Math.floor(Math.random() * fwColors.length)]});
+  }
+  function explode(r) {
+    const n = 46 + Math.floor(Math.random() * 30), heart = Math.random() < .35;
+    for (let i = 0; i < n; i++) {
+      const a = (Math.PI * 2 * i) / n; let vx, vy;
+      if (heart) { const t = a; vx = 16 * Math.sin(t) ** 3 * .28; vy = -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t)) * .28; }
+      else { const sp = 2 + Math.random() * 4.5; vx = Math.cos(a) * sp; vy = Math.sin(a) * sp; }
+      sparks.push({x: r.x, y: r.y, vx, vy, life: 1, decay: .012 + Math.random() * .012, color: Math.random() < .25 ? '#fff' : r.color});
+    }
+  }
+  function fwTick() {
+    ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,.22)'; ctx.fillRect(0, 0, innerWidth, innerHeight);
+    ctx.globalCompositeOperation = 'lighter';
+    rockets = rockets.filter((r) => { r.x += r.vx; r.y += r.vy; r.vy += .09; ctx.fillStyle = r.color; ctx.beginPath(); ctx.arc(r.x, r.y, 2.2, 0, 7); ctx.fill(); if (r.vy >= -1) { explode(r); return false; } return true; });
+    sparks = sparks.filter((p) => { p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy = p.vy * .985 + .045; p.life -= p.decay; if (p.life <= 0) return false; ctx.globalAlpha = p.life; ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, 1.9, 0, 7); ctx.fill(); ctx.globalAlpha = 1; return true; });
+    if (performance.now() > fwLaunch) { launch(); fwLaunch = performance.now() + 450 + Math.random() * 650; }
+    fwFrame = requestAnimationFrame(fwTick);
+  }
+  function salvo() { for (let i = 0; i < 5; i++) window.setTimeout(() => launch(innerWidth * (.15 + i * .175)), i * 140); }
+  function openFinale() {
+    finale.hidden = false; document.body.classList.add('no-scroll'); finale.classList.remove('play'); void finale.offsetWidth; finale.classList.add('play');
+    if (reduceMotion) return;
+    sizeCanvas(); cancelAnimationFrame(fwFrame); rockets = []; sparks = []; fwLaunch = 0; fwTick(); salvo(); confettiRain(50);
+  }
+  function closeFinale() { finale.hidden = true; document.body.classList.remove('no-scroll'); cancelAnimationFrame(fwFrame); ctx.clearRect(0, 0, innerWidth, innerHeight); }
+  window.addEventListener('resize', () => { if (!finale.hidden) sizeCanvas(); });
+  $('finale-again').addEventListener('click', (e) => { salvo(); burst(e.clientX, e.clientY, 16); });
+  $('finale-restart').addEventListener('click', () => { closeFinale(); showChapter(0); window.scrollTo({top:0, behavior:'smooth'}); });
+  canvas.addEventListener('click', (e) => launch(e.clientX));
   secret.addEventListener('click', (e) => { if (e.target === secret) closeSecret(); });
 
   // ---------- 3. День рождения: свечи и конфетти ----------
@@ -244,6 +283,16 @@
   if (envelope) envelope.addEventListener('click', () => { if (!letterOpened) next.click(); });
   document.querySelectorAll('.flourish-heart .heart').forEach((h) => h.closest('svg').addEventListener('click', (e) => burst(e.clientX, e.clientY, 10)));
   updateCountdown(); setInterval(updateCountdown, 1000);
+
+  // ---------- Заставка: прячем, когда загрузились портрет и шрифты (не дольше 4 с) ----------
+  const splash = $('splash');
+  if (splash) {
+    const bg = document.querySelector('.poster-bg');
+    const imgReady = bg && !bg.complete ? new Promise((r) => { bg.addEventListener('load', r, {once:true}); bg.addEventListener('error', r, {once:true}); }) : Promise.resolve();
+    const fontsReady = document.fonts ? document.fonts.ready : Promise.resolve();
+    const hide = () => { splash.classList.add('done'); window.setTimeout(() => splash.remove(), 700); };
+    Promise.race([Promise.all([imgReady, fontsReady]), new Promise((r) => window.setTimeout(r, 4000))]).then(hide);
+  }
   // If opened through a Telegram deep link with ?story=1, start at the story screen.
   const params = new URLSearchParams(location.search);
   if (params.get('story') === '1' && !isLocked()) { openStoryApp(); showCountdown(); }

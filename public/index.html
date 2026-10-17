@@ -9,18 +9,24 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Моё солнышко ♥">
   <meta property="og:description" content="Маленький сюрприз ко дню рождения — открой, когда будешь одна и в хорошем настроении.">
-  <meta property="og:image" content="https://nikolaimv77.github.io/happy.github.io/assets/images/birthday-portrait.jpg">
-  <meta property="og:image:width" content="864">
-  <meta property="og:image:height" content="1536">
+  <meta property="og:image" content="https://nikolaimv77.github.io/happy.github.io/assets/images/og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Моё солнышко — сюрприз ко дню рождения, 30.10.2026">
   <meta property="og:url" content="https://nikolaimv77.github.io/happy.github.io/">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=21">
+  <link rel="preload" as="image" href="./assets/images/birthday-portrait.webp" fetchpriority="high">
+  <link rel="stylesheet" href="./assets/css/style.css?v=22">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
+  <div class="splash" id="splash" aria-hidden="true">
+    <div class="splash-heart">♥</div>
+    <p>Готовлю сюрприз…</p>
+  </div>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
       <linearGradient id="gold" x1="0" y1="0" x2="0" y2="1">
@@ -30,7 +36,7 @@
   </svg>
   <main class="poster-screen" id="poster-screen" aria-label="Поздравление для моего солнышка">
     <div class="poster-stage">
-      <img class="poster-bg" src="./assets/images/birthday-portrait.jpg" alt="" draggable="false">
+      <img class="poster-bg" src="./assets/images/birthday-portrait.webp" fetchpriority="high" alt="" draggable="false">
       <div class="petals" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
       <section class="poster-copy" aria-label="Поздравление">
         <h1 class="poster-title">Моё<br><span>солнышко</span></h1>
@@ -144,6 +150,26 @@
       <button class="primary-button" id="secret-close" type="button">Обнять в ответ <span>♥</span></button>
     </div>
   </div>
-  <script src="./assets/js/app.js?v=21" defer></script>
+  <div class="finale" id="finale" hidden role="dialog" aria-modal="true" aria-labelledby="finale-title">
+    <canvas class="fireworks" id="fireworks" aria-hidden="true"></canvas>
+    <div class="finale-content">
+      <p class="finale-date">30 · 10 · 2026</p>
+      <h2 class="finale-title" id="finale-title">С днём<br>рождения</h2>
+      <p class="finale-name">моё солнышко</p>
+      <svg class="flourish-heart" viewBox="0 0 260 64" aria-hidden="true">
+        <path d="M8 40 C40 40 52 22 76 30 C92 35 88 50 76 46 C68 43 74 34 84 36 C100 40 106 46 112 44" />
+        <path d="M252 40 C220 40 208 22 184 30 C168 35 172 50 184 46 C192 43 186 34 176 36 C160 40 154 46 148 44" />
+        <path class="heart" d="M130 58 C112 44 104 36 104 26 C104 17 111 11 119 11 C124 11 128 14 130 18 C132 14 136 11 141 11 C149 11 156 17 156 26 C156 36 148 44 130 58 Z" />
+        <path class="spark" d="M130 26 L132 32 L138 34 L132 36 L130 42 L128 36 L122 34 L128 32 Z" />
+      </svg>
+      <p class="finale-wish">Пусть этот год будет самым светлым,<br>тёплым и счастливым в твоей жизни</p>
+      <p class="finale-sign">Твой человек <span>♥</span></p>
+      <div class="finale-actions">
+        <button class="primary-button" id="finale-again" type="button">Ещё салют <span>✨</span></button>
+        <button class="text-button" id="finale-restart" type="button">↺ Начать сначала</button>
+      </div>
+    </div>
+  </div>
+  <script src="./assets/js/app.js?v=22" defer></script>
 </body>
 </html>

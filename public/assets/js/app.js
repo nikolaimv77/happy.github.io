@@ -5,7 +5,7 @@
   const $ = (id) => document.getElementById(id);
   const poster = $('poster-screen'), storyShell = $('story-shell'), posterOpen = $('poster-open');
   function openStoryApp() { if (poster) poster.hidden = true; if (storyShell) storyShell.hidden = false; }
-  if (posterOpen) posterOpen.addEventListener('click', () => { openStoryApp(); showChapter(0); if (music && music.paused) playMusic(); });
+  if (posterOpen) posterOpen.addEventListener('click', () => { burstFrom(posterOpen); openStoryApp(); showChapter(0); if (music && music.paused) playMusic(); });
   const musicButton = $('music-toggle'), music = $('background-music'), musicState = $('music-state');
   function syncMusic() {
     if (!musicButton || !music) return;
@@ -37,6 +37,27 @@
   const isBirthday = () => { const now = new Date(); return now >= target && now < new Date('2026-10-31T00:00:00+05:00'); };
   const unitWords = {days:['день','дня','дней'], hours:['час','часа','часов'], minutes:['минута','минуты','минут'], seconds:['секунда','секунды','секунд']};
   const plural = (n, w) => { const a = n % 100, b = n % 10; if (a > 10 && a < 20) return w[2]; if (b === 1) return w[0]; if (b > 1 && b < 5) return w[1]; return w[2]; };
+  function setNumber(node, value) {
+    if (!node) return; const text = String(value).padStart(2, '0');
+    if (node.textContent === text) return;
+    const changed = node.textContent !== '--'; node.textContent = text;
+    if (changed) { node.classList.remove('tick'); void node.offsetWidth; node.classList.add('tick'); }
+  }
+  // Маленький салют из сердечек в точке нажатия.
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function burst(x, y, count = 14) {
+    if (reduceMotion) return;
+    const glyphs = ['♥', '♡', '✦', '❀'];
+    for (let i = 0; i < count; i++) {
+      const el = document.createElement('span'); el.className = 'burst'; el.textContent = glyphs[i % glyphs.length];
+      const angle = (Math.PI * 2 * i) / count + Math.random() * .5, dist = 60 + Math.random() * 90;
+      el.style.left = x + 'px'; el.style.top = y + 'px';
+      el.style.setProperty('--dx', Math.cos(angle) * dist + 'px'); el.style.setProperty('--dy', Math.sin(angle) * dist - 40 + 'px');
+      el.style.setProperty('--s', (.7 + Math.random() * .8).toFixed(2)); el.style.setProperty('--r', (Math.random() * 80 - 40).toFixed(0) + 'deg');
+      document.body.appendChild(el); el.addEventListener('animationend', () => el.remove());
+    }
+  }
+  const burstFrom = (el) => { if (!el) return; const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); };
   function updateCountdown() {
     const now = Date.now(); let diff = Math.max(0, target.getTime() - now);
     const days = Math.floor(diff / 86400000); diff %= 86400000;
@@ -44,14 +65,17 @@
     const minutes = Math.floor(diff / 60000); const seconds = Math.floor((diff % 60000) / 1000);
     const values = {days, hours, minutes, seconds};
     for (const [key, value] of Object.entries(values)) {
-      const node = $(key); if (node) node.textContent = String(value).padStart(2, '0');
-      const posterNode = $('poster-' + key); if (posterNode) posterNode.textContent = String(value).padStart(2, '0');
+      setNumber($(key), value); setNumber($('poster-' + key), value);
       const label = plural(value, unitWords[key]);
       for (const id of [key + '-label', 'poster-' + key + '-label']) { const l = $(id); if (l) l.textContent = label; }
     }
-    if (Date.now() >= target.getTime()) {
-      const posterEyebrow = $('eyebrow');
-      if (posterEyebrow) posterEyebrow.textContent = 'С ДНЁМ РОЖДЕНИЯ, МОЁ СОЛНЫШКО';
+    if (Date.now() >= target.getTime() && !document.body.classList.contains('is-birthday')) {
+      document.body.classList.add('is-birthday');
+      const posterSubtitle = $('poster-subtitle'), posterCountdown = $('poster-countdown');
+      if (posterSubtitle) posterSubtitle.innerHTML = 'Сегодня твой день!<br>С днём рождения,<br>моя любимая';
+      if (posterCountdown) posterCountdown.hidden = true;
+      if (posterOpen) posterOpen.innerHTML = 'Открыть поздравление <span>♡</span>';
+      window.setTimeout(() => burst(window.innerWidth / 2, window.innerHeight / 2, 28), 600);
       if (eyebrow) eyebrow.textContent = '30 ОКТЯБРЯ · ТВОЙ ОСОБЕННЫЙ ДЕНЬ';
       if (hint) hint.textContent = 'Сегодня всё это — для тебя ❤️';
       if (next) next.innerHTML = 'Начать поздравление <span>↗</span>';
@@ -66,6 +90,7 @@
     mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Моё<br>солнышко'; body.innerHTML = 'С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
+    burstFrom(next);
     if (mode === 'story' && chapters[chapterIndex].letter) {
       if (!letterOpened) { letterOpened = true; envelope.classList.add('open'); next.innerHTML = 'Письмо открыто · читать ещё раз <span>♥</span>'; window.setTimeout(() => { body.hidden = false; body.classList.remove('letter-copy-reveal'); void body.offsetWidth; body.classList.add('letter-copy-reveal'); next.innerHTML = 'Прочитать письмо ещё раз <span>↗</span>'; }, 720); } else { body.hidden = false; body.classList.remove('letter-copy-reveal'); void body.offsetWidth; body.classList.add('letter-copy-reveal'); } return;
     }
@@ -77,6 +102,7 @@
     if (chapterIndex < chapters.length - 1) showChapter(chapterIndex + 1); else showChapter(chapters.length - 1);
   });
   back.addEventListener('click', showCountdown);
+  document.querySelectorAll('.flourish-heart .heart').forEach((h) => h.closest('svg').addEventListener('click', (e) => burst(e.clientX, e.clientY, 10)));
   updateCountdown(); setInterval(updateCountdown, 1000);
   // If opened through a Telegram deep link with ?story=1, start at the story screen.
   const params = new URLSearchParams(location.search);

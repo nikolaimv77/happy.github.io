@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="./assets/css/style.css?v=16">
+  <link rel="stylesheet" href="./assets/css/style.css?v=17">
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
 </head>
 <body>
@@ -32,7 +32,7 @@
           <path class="heart" d="M130 58 C112 44 104 36 104 26 C104 17 111 11 119 11 C124 11 128 14 130 18 C132 14 136 11 141 11 C149 11 156 17 156 26 C156 36 148 44 130 58 Z" />
           <path class="spark" d="M130 26 L132 32 L138 34 L132 36 L130 42 L128 36 L122 34 L128 32 Z" />
         </svg>
-        <p class="poster-subtitle">До твоего<br>особенного дня<br>осталось</p>
+        <p class="poster-subtitle" id="poster-subtitle">До твоего<br>особенного дня<br>осталось</p>
         <div class="gold-divider" aria-hidden="true"><span>♥</span></div>
         <div class="poster-countdown" id="poster-countdown" aria-label="Обратный отсчёт до дня рождения">
           <div class="poster-time-unit"><strong id="poster-days">--</strong><span id="poster-days-label">дней</span></div>
@@ -58,11 +58,18 @@
     <source src="./assets/audio/birthday-song.m4a" type="audio/mp4">
   </audio>
   <main class="app-shell story-shell" id="story-shell" hidden>
+    <div class="petals story-petals" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
     <section class="scene" id="scene" aria-live="polite">
+      <span class="corner tl" aria-hidden="true"></span><span class="corner tr" aria-hidden="true"></span><span class="corner bl" aria-hidden="true"></span><span class="corner br" aria-hidden="true"></span>
       <div class="content" id="content">
         <p class="eyebrow" id="eyebrow">ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ</p>
         <h1 id="title">Моё<br>солнышко</h1>
-        <div class="title-heart" aria-hidden="true">♡</div>
+        <svg class="flourish-heart title-heart" viewBox="0 0 260 64" aria-hidden="true">
+          <path d="M8 40 C40 40 52 22 76 30 C92 35 88 50 76 46 C68 43 74 34 84 36 C100 40 106 46 112 44" />
+          <path d="M252 40 C220 40 208 22 184 30 C168 35 172 50 184 46 C192 43 186 34 176 36 C160 40 154 46 148 44" />
+          <path class="heart" d="M130 58 C112 44 104 36 104 26 C104 17 111 11 119 11 C124 11 128 14 130 18 C132 14 136 11 141 11 C149 11 156 17 156 26 C156 36 148 44 130 58 Z" />
+          <path class="spark" d="M130 26 L132 32 L138 34 L132 36 L130 42 L128 36 L122 34 L128 32 Z" />
+        </svg>
         <p class="body" id="body">С каждым днём<br>я всё больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span></p>
         <div class="countdown" id="countdown" aria-label="Обратный отсчёт">
           <div class="time-unit"><strong id="days">--</strong><span id="days-label">дней</span></div>
@@ -80,6 +87,6 @@
       </div>
     </section>
   </main>
-  <script src="./assets/js/app.js?v=16" defer></script>
+  <script src="./assets/js/app.js?v=17" defer></script>
 </body>
 </html>

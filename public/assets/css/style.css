@@ -263,3 +263,108 @@ body{
 @keyframes portraitReveal{from{opacity:0;transform:translateY(12px) scale(.96);filter:blur(4px)}to{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
 @media(max-height:760px){.portrait-frame{width:104px;margin-bottom:15px}.portrait-frame img{height:120px}.scene.home{padding-top:24px;padding-bottom:24px}.scene.home .heart-wrap{height:78px;margin-bottom:8px}.scene.home .heart{font-size:45px}.scene.home .heart-orbit{width:78px;height:78px}.scene.home .orbit-two{width:104px;height:104px}.scene.home .eyebrow{margin-bottom:10px}.scene.home h1{font-size:clamp(33px,8vw,42px);margin-bottom:12px}.scene.home .body{font-size:12px;line-height:1.65;margin-bottom:14px}.scene.home .countdown{margin-top:14px}.scene.home .primary-button{margin-top:20px}.scene.home .signature{margin-top:20px}}
 @media(prefers-reduced-motion:reduce){.portrait-frame,.portrait-frame:before,.portrait-frame:after{animation:none!important}}
+
+/* Hide the removed English eyebrow label on the home screen. */
+.eyebrow { display: none !important; }
+
+
+/* TIMER LANDING — portrait-first romantic countdown, deep lilac and sparkling gold */
+body {
+  background:
+    radial-gradient(ellipse at 12% 18%, rgba(175,123,189,.24), transparent 38%),
+    radial-gradient(ellipse at 88% 72%, rgba(183,131,39,.12), transparent 35%),
+    linear-gradient(145deg, #17051f 0%, #390038 42%, #240b36 100%);
+  color: #fff5e8;
+}
+.app-shell { width: min(100%, 560px); padding: 14px 12px 18px; }
+.brand { margin-bottom: 12px; color: #f4e9ff; }
+.scene.home {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px 22px;
+  margin: 0 auto;
+  width: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  color: #fff4e6;
+  background: linear-gradient(180deg, rgba(57,0,56,.2) 0%, rgba(39,7,52,.92) 49%, rgba(23,5,31,.98) 100%);
+  border: 1px solid rgba(255,225,151,.88);
+  box-shadow: 0 0 0 1px rgba(255,238,195,.14), 0 18px 65px rgba(0,0,0,.42), 0 0 34px rgba(255,205,103,.14), inset 0 0 34px rgba(175,123,189,.08);
+  backdrop-filter: blur(14px);
+}
+.scene.home:before {
+  z-index: 4; inset: 0 0 auto; height: 2px;
+  background: linear-gradient(90deg, transparent, #ffe7a6 18%, #fff8df 48%, #d9a747 78%, transparent);
+  box-shadow: 0 0 14px #ffe7a6;
+}
+.scene.home:after {
+  z-index: 3; inset: 0; transform: translateX(-120%);
+  background: linear-gradient(110deg, transparent 40%, rgba(255,255,255,.12) 48%, rgba(255,231,166,.18) 50%, transparent 57%);
+  animation: goldSweep 10s ease-in-out infinite;
+}
+.scene.home .eyebrow, .scene.home .heart-wrap { display: none !important; }
+.scene.home .portrait-frame {
+  order: 1; display: block; position: relative;
+  width: calc(100% + 32px); max-width: none; height: clamp(270px, 42vh, 430px);
+  margin: -12px -16px 18px; padding: 0; border-radius: 26px 26px 8px 8px;
+  background: linear-gradient(135deg, #fff4c8, #b78327 25%, #ffe7a6 50%, #7A3776 70%, #ffe7a6);
+  box-shadow: inset 0 -1px rgba(255,231,166,.9), 0 12px 32px rgba(0,0,0,.22);
+  overflow: hidden; animation: portraitReveal 1s cubic-bezier(.2,.8,.2,1) both;
+}
+.scene.home .portrait-frame:before { top: 18px; left: 16px; font-size: 22px; }
+.scene.home .portrait-frame:after { right: 17px; bottom: 45px; font-size: 25px; }
+.scene.home .portrait-frame img {
+  width: 100%; height: 100%; object-fit: cover; object-position: 68% center;
+  border: 0; border-radius: 25px 25px 8px 8px; filter: saturate(.93) contrast(1.03);
+}
+.scene.home .portrait-frame:where(:not(img)) { isolation: isolate; }
+.scene.home .portrait-frame figcaption {
+  bottom: 14px; left: 18px; transform: none; padding: 7px 13px;
+  background: rgba(39,4,48,.76); border-color: rgba(255,231,166,.9);
+  color: #fff0c3; font-size: 10px; letter-spacing: .1em; backdrop-filter: blur(8px);
+}
+.scene.home h1 { order: 2; color: #fff0c8; font-size: clamp(35px, 9vw, 48px); line-height: 1.02; margin: 0 auto 12px; text-shadow: 0 2px 24px rgba(255,214,123,.2); }
+.scene.home .body { order: 3; color: #eadcf0; font-family: Georgia, serif; font-size: clamp(13px, 3.6vw, 15px); line-height: 1.65; margin: 0 auto 13px; }
+.scene.home .countdown {
+  order: 4; width: 100%; margin: 13px auto 0; padding: 14px 8px 12px;
+  border: 1px solid rgba(255,224,145,.78); border-radius: 20px;
+  background: linear-gradient(130deg, rgba(57,0,56,.7), rgba(122,55,118,.36), rgba(30,5,39,.75));
+  box-shadow: inset 0 0 22px rgba(255,231,166,.07), 0 0 22px rgba(255,210,111,.09);
+}
+.scene.home .time-unit { min-width: 0; flex: 1; gap: 5px; }
+.scene.home .time-unit strong { color: #ffe6a0; font-family: Georgia, serif; font-size: clamp(28px, 7.4vw, 40px); text-shadow: 0 0 5px #fff5cb, 0 0 17px rgba(255,196,75,.48); }
+.scene.home .time-unit span { color: #e6d4ed; font-size: 9px; letter-spacing: .1em; }
+.scene.home .countdown i { color: #ffe7a6; text-shadow: 0 0 10px #ffc94d; }
+.scene.home .hint { order: 5; color: #eadcf0; margin: 13px 0 0; font-size: 11px; letter-spacing: .05em; }
+.scene.home .primary-button {
+  order: 6; margin: 20px auto 0; min-height: 58px; border-radius: 999px;
+  background: linear-gradient(110deg, #390038 0%, #7A3776 42%, #4c125d 72%, #390038 100%);
+  border: 1px solid #ffe7a6; color: #fff4d9; font-family: Georgia, serif; font-size: 16px;
+  box-shadow: 0 0 0 2px rgba(255,231,166,.15), 0 0 20px rgba(255,210,111,.3), inset 0 1px rgba(255,255,255,.2);
+}
+.scene.home .primary-button span { font-size: 23px; }
+.scene.home .signature { order: 7; margin: 20px 0 8px; color: #e4d3eb; }
+.scene.home .chapter-counter { order: 8; color: #cdb7d9; }
+.scene.home .text-button { order: 9; color: #ffe7a6; }
+.scene.home .progress { order: 10; }
+.scene:not(.home) { background: linear-gradient(145deg, rgba(250,247,255,.96), rgba(226,211,243,.94)); color: #390038; }
+footer { color: rgba(246,231,255,.72); padding-top: 14px; }
+.ambient-particle { opacity: .8; }
+@media (max-height: 760px) {
+  .app-shell { padding-top: 8px; }
+  .brand { margin-bottom: 8px; }
+  .scene.home { padding: 8px 13px 16px; }
+  .scene.home .portrait-frame { height: clamp(220px, 36vh, 300px); margin: -8px -13px 14px; width: calc(100% + 26px); }
+  .scene.home h1 { font-size: clamp(31px, 8vw, 39px); }
+  .scene.home .body { font-size: 12px; margin-bottom: 8px; }
+  .scene.home .countdown { padding: 10px 5px; margin-top: 8px; }
+  .scene.home .primary-button { margin-top: 13px; min-height: 50px; }
+  .scene.home .signature { margin-top: 13px; }
+}
+@media (max-width: 360px) {
+  .app-shell { padding-left: 8px; padding-right: 8px; }
+  .scene.home { padding-left: 11px; padding-right: 11px; }
+  .scene.home .portrait-frame { width: calc(100% + 22px); margin-left: -11px; margin-right: -11px; }
+  .scene.home .time-unit span { font-size: 8px; }
+}
+@media(prefers-reduced-motion:reduce) { .scene.home:after { animation:none!important; } }

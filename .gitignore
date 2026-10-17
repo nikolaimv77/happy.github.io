@@ -1,7 +1,8 @@
-.env
-.env.*
-!.env.example
 .DS_Store
+.env
 /vendor/
-/storage/*
+/.idea/
+/storage/*.json
+/storage/*.txt
+/storage/*.log
 !/storage/.gitkeep

@@ -9,7 +9,7 @@
     layer.setAttribute('aria-hidden', 'true');
     document.body.prepend(layer);
     const symbols = ['✦', '✧', '♥', '·'];
-    const colors = ['#f7d98b', '#d9a9ff', '#f8e9ff', '#c58aff'];
+    const colors = ['#f7d98b', '#AF7BBD', '#DBD9E8', '#CAB3E6', '#ffe7a6'];
     for (let i = 0; i < 24; i++) {
       const p = document.createElement('span');
       p.className = i % 3 === 0 ? 'ambient-particle dot' : 'ambient-particle';
@@ -25,7 +25,7 @@
   })();
 
   const tg = window.Telegram?.WebApp;
-  if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#07111f'); tg.setBackgroundColor('#07111f'); } catch (_) {} }
+  if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#390038'); tg.setBackgroundColor('#DBD9E8'); } catch (_) {} }
   const $ = (id) => document.getElementById(id);
   const scene = $('scene'), eyebrow = $('eyebrow'), title = $('title'), body = $('body'), next = $('next'), back = $('back'), counter = $('counter'), hint = $('hint'), countdown = $('countdown'), progress = $('progress'), fill = $('progress-fill'), signature = $('signature'), letterStage = $('letter-stage'), envelope = $('envelope');
   // Preview mode: temporarily allow opening every chapter before the birthday.

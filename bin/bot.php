@@ -17,6 +17,8 @@ Dotenv\Dotenv::createImmutable($root)->safeLoad();
 date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'Asia/Tashkent');
 
 $token = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
+$previewMode = filter_var($_ENV['PREVIEW_MODE'] ?? '0', FILTER_VALIDATE_BOOL);
+$canOpenStory = static fn (): bool => $previewMode || Story::isBirthdayToday();
 $storage = $root . '/storage';
 $recipientFile = $storage . '/recipient.json';
 $offsetFile = $storage . '/update-offset.txt';
@@ -73,7 +75,7 @@ while (true) {
                     );
                     @chmod($recipientFile, 0600);
 
-                    if (Story::isBirthdayToday()) {
+                    if ($canOpenStory()) {
                         $chapter = $progress->get($chatId);
                         $bot->sendMessage($chatId, Story::scene($chapter)['text'], Story::keyboard($chapter));
                     } else {
@@ -102,10 +104,10 @@ while (true) {
                     );
                     @chmod($countdownFile, 0600);
                 } elseif ($text === '/story') {
-                    $chapter = Story::isBirthdayToday() ? $progress->get($chatId) : Story::PROLOGUE;
+                    $chapter = $canOpenStory() ? $progress->get($chatId) : Story::PROLOGUE;
                     $bot->sendMessage($chatId, Story::scene($chapter)['text'], Story::keyboard($chapter));
                 } elseif ($text === '/restart') {
-                    if (!Story::isBirthdayToday()) {
+                    if (!$canOpenStory()) {
                         $bot->sendMessage($chatId, 'История откроется 30 октября. Пока можно следить за обратным отсчётом. ❤️', Countdown::keyboard());
                     } else {
                         $progress->reset($chatId);
@@ -157,7 +159,7 @@ while (true) {
                         $bot->answerCallbackQuery($callbackId, 'Не удалось открыть эту главу.');
                         continue;
                     }
-                    if (!Story::isBirthdayToday()) {
+                    if (!$canOpenStory()) {
                         $bot->answerCallbackQuery($callbackId, 'История откроется в день рождения. ❤️');
                         continue;
                     }

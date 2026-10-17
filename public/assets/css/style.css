@@ -174,3 +174,80 @@ footer{color:#78658d}
 .ambient-particle{color:var(--particle-color);text-shadow:0 0 12px currentColor}
 @keyframes lilacAurora{0%{background-position:0% 15%}50%{background-position:70% 80%}100%{background-position:100% 20%}}
 @media(prefers-reduced-motion:reduce){body{animation:none!important}}
+
+
+/* VARIANT 2 — «ГЛУБОКАЯ СИРЕНЬ»: deep plum, lavender glass and sparkling gold */
+:root{
+  --bg:#DBD9E8;
+  --panel:rgba(237,229,247,.91);
+  --text:#390038;
+  --muted:#603b68;
+  --gold:#b78327;
+  --gold2:#ffe9a0;
+  --lilac:#AF7BBD;
+  --pink:#CAB3E6;
+  --tg-bg:#DBD9E8;
+  --tg-text:#390038;
+}
+html{background:#390038}
+body{
+  background:
+    radial-gradient(ellipse at 12% 12%,rgba(175,123,189,.62),transparent 34%),
+    radial-gradient(ellipse at 88% 80%,rgba(202,179,230,.45),transparent 33%),
+    radial-gradient(ellipse at 50% 48%,rgba(255,231,166,.13),transparent 52%),
+    url("../images/midnight-romance.png") center/cover fixed,
+    linear-gradient(145deg,#390038 0%,#7A3776 38%,#CAB3E6 72%,#DBD9E8 100%);
+  color:var(--text);
+}
+.stars,.stars:before,.stars:after{opacity:.58;background-size:220px 240px;filter:drop-shadow(0 0 4px rgba(255,220,133,.65))}
+.glow-one{background:#AF7BBD;opacity:.3}
+.glow-two{background:#f7d98b;opacity:.22}
+.brand{color:#F6EAFB;text-shadow:0 0 16px #CAB3E677}
+.brand b{color:#ffe29a;text-shadow:0 0 12px #f7d98b99}
+.brand-mark,.brand-heart{color:#ffe29a;text-shadow:0 0 12px #f7d98bcc}
+.scene{
+  color:#390038;
+  background:linear-gradient(145deg,rgba(250,247,255,.94),rgba(226,211,243,.90) 58%,rgba(237,229,247,.93));
+  border:1px solid rgba(255,222,143,.92);
+  box-shadow:0 24px 80px rgba(25,0,33,.38),0 0 0 1px rgba(255,239,185,.24),inset 0 1px rgba(255,255,255,.98);
+  backdrop-filter:blur(22px);
+}
+.scene:before{height:2px;background:linear-gradient(90deg,transparent,#ffe9a0,#fff8dc,#b78327,transparent);box-shadow:0 0 12px #ffe9a0}
+.scene:after{content:"";position:absolute;inset:-40% -80%;pointer-events:none;background:linear-gradient(110deg,transparent 42%,rgba(255,255,255,.24) 48%,rgba(255,231,166,.18) 50%,transparent 56%);transform:translateX(-70%);animation:goldSweep 9s ease-in-out infinite;}
+.eyebrow{color:#7A3776;text-shadow:0 0 12px rgba(255,231,166,.35)}
+.heart{color:#CAB3E6;text-shadow:0 0 8px #fff,0 0 18px #AF7BBD,0 0 32px #7A3776,0 0 48px #ffe7a655;animation:heartbeat 2.5s ease-in-out infinite, heartGoldGlow 3.5s ease-in-out infinite alternate}
+.heart-orbit{border-color:rgba(183,131,39,.72);box-shadow:0 0 9px rgba(255,231,166,.38);animation:orbitSpin 18s linear infinite}
+.orbit-two{border-color:rgba(122,55,118,.28);animation-direction:reverse;animation-duration:25s}
+.spark{color:#b78327;text-shadow:0 0 5px #fff,0 0 13px #ffe7a6,0 0 22px #b78327;animation:sparkFloat 3s ease-in-out infinite}
+.body{color:#603b68}
+.time-unit strong{color:#9b6a18;text-shadow:0 1px #fff3cb,0 0 12px #ffe7a655,0 0 24px #b7832733}
+.time-unit span,.hint{color:#76517e}
+.countdown i{color:#AF7BBD;text-shadow:0 0 8px #fff}
+.primary-button{
+  position:relative;isolation:isolate;overflow:hidden;
+  border:1px solid #ffe7a6;border-radius:14px;
+  background:linear-gradient(110deg,#390038 0%,#7A3776 38%,#AF7BBD 68%,#390038 100%);
+  background-size:220% 100%;color:#fff5d8;
+  box-shadow:0 10px 30px rgba(57,0,56,.27),0 0 0 1px rgba(255,231,166,.42),0 0 24px rgba(255,215,119,.23);
+  animation:buttonShimmer 7s ease-in-out infinite;
+  transition:transform .25s ease,box-shadow .25s ease,filter .25s ease;
+}
+.primary-button:before{content:"";position:absolute;z-index:-1;top:-30%;bottom:-30%;left:-45%;width:32%;transform:skewX(-22deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.72),rgba(255,231,166,.75),transparent);animation:buttonGlint 5.5s ease-in-out infinite}
+.primary-button:hover{transform:translateY(-2px);filter:brightness(1.08);box-shadow:0 14px 34px rgba(57,0,56,.34),0 0 28px rgba(255,215,119,.4)}
+.primary-button span{color:#ffe7a6;text-shadow:0 0 12px #ffe7a6}
+.text-button{color:#7A3776}
+.signature,.chapter-counter,footer{color:#DBD0E8}
+.signature span{color:#ffe7a6;text-shadow:0 0 9px #ffe7a6}
+.progress{background:rgba(57,0,56,.13)}
+.progress span{background:linear-gradient(90deg,#390038,#7A3776,#AF7BBD,#ffe7a6,#fff6d8);box-shadow:0 0 10px #ffe7a6}
+.envelope-back{background:linear-gradient(145deg,#AF7BBD,#7A3776);border-color:#ffe7a6}
+.letter-paper{background:linear-gradient(160deg,#fffdf8,#EDE5F7);border-color:#d6ad55;color:#603b68}
+.letter-paper b{color:#b78327;text-shadow:0 0 8px #ffe7a6}
+.envelope-front{background:linear-gradient(145deg,#AF7BBD,#7A3776,#390038)}
+.envelope-flap{background:linear-gradient(160deg,#EDE5F7,#CAB3E6,#AF7BBD)}
+.envelope-caption{color:#7A3776}
+.scene.letter .body{background:rgba(250,247,255,.88);border-color:rgba(183,131,39,.4);color:#603b68}
+.ambient-particle{text-shadow:0 0 9px currentColor,0 0 18px #ffe7a6}
+@keyframes goldSweep{0%,18%{transform:translateX(-70%);opacity:0}32%{opacity:.8}55%,100%{transform:translateX(70%);opacity:0}}
+@keyframes heartGoldGlow{from{filter:drop-shadow(0 0 5px #AF7BBD)}to{filter:drop-shadow(0 0 13px #ffe7a6) drop-shadow(0 0 24px #7A3776)}}
+@media(prefers-reduced-motion:reduce){.scene:after,.primary-button:before{animation:none!important}}

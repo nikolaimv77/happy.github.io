@@ -184,6 +184,9 @@
   };
   track.addEventListener('scroll', () => window.requestAnimationFrame(syncDots), {passive:true}); syncDots();
 
+  // Фотогалерея открыта всегда — даже до 30.10, когда сам сюрприз ещё закрыт.
+  const posterGallery = $('poster-gallery');
+  if (posterGallery) posterGallery.addEventListener('click', () => openLightbox(0));
   const lightbox = $('lightbox'), lbImg = $('lightbox-img'), lbCap = $('lightbox-caption'), lbCount = $('lightbox-count');
   let lbIndex = 0;
   function showPhoto(i) { lbIndex = (i + photos.length) % photos.length; const p = photos[lbIndex]; new Image().src = photos[(lbIndex + 1) % photos.length].src; lbImg.classList.remove('in'); void lbImg.offsetWidth; lbImg.src = p.src; lbImg.alt = p.caption; lbCap.textContent = p.caption; lbCount.textContent = (lbIndex + 1) + ' / ' + photos.length; lbImg.classList.add('in'); }

@@ -16,7 +16,8 @@ date_default_timezone_set($timezone->getName());
 
 $storage = $root . '/storage';
 $recipientFile = $storage . '/recipient.json';
-$token = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
+// The token may come from .env or from the environment (e.g. macOS Keychain via bin/start-bot.sh).
+$token = (string) ($_ENV['TELEGRAM_BOT_TOKEN'] ?? '') ?: (string) getenv('TELEGRAM_BOT_TOKEN');
 $dryRun = ($_ENV['ENABLE_REAL_BIRTHDAY_SEND'] ?? '0') !== '1';
 
 if (!is_file($recipientFile)) {

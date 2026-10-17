@@ -16,7 +16,8 @@ Dotenv\Dotenv::createImmutable($root)->safeLoad();
 
 date_default_timezone_set($_ENV['APP_TIMEZONE'] ?? 'Asia/Tashkent');
 
-$token = $_ENV['TELEGRAM_BOT_TOKEN'] ?? '';
+// The token may come from .env or from the environment (e.g. macOS Keychain via bin/start-bot.sh).
+$token = (string) ($_ENV['TELEGRAM_BOT_TOKEN'] ?? '') ?: (string) getenv('TELEGRAM_BOT_TOKEN');
 $storage = $root . '/storage';
 $recipientFile = $storage . '/recipient.json';
 $offsetFile = $storage . '/update-offset.txt';

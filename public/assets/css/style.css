@@ -62,3 +62,37 @@ body{overflow-x:hidden}
 .music-toggle{position:absolute;z-index:25;right:6%;top:3%;width:42px;height:42px;border:1px solid rgba(255,220,145,.9);border-radius:50%;background:rgba(53,0,54,.68);color:#ffe3a0;font-size:25px;box-shadow:0 0 12px rgba(255,198,91,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);cursor:pointer}
 .music-toggle[aria-pressed="true"]{background:rgba(153,75,147,.82);box-shadow:0 0 17px rgba(255,205,109,.85)}
 @media(max-width:420px){.poster-countdown{left:7.2%;top:41.4%;width:64.2%;height:11.8%;gap:2.1%}.poster-time-unit{border-radius:7px}.poster-time-unit strong{font-size:clamp(18px,5.7vw,24px)}.poster-time-unit span{font-size:clamp(6px,1.75vw,8px);margin-top:3px}.poster-open-button{left:13.5%;top:69.7%;width:49%;min-height:35px;padding:7px 5px;font-size:12px}.music-toggle{width:36px;height:36px;font-size:22px;right:5%;top:2%}}
+
+/* Reference-inspired poster: use the clean portrait artwork as background so live text
+   and countdown are rendered exactly once (the old background had baked-in digits). */
+.poster-art{width:100%;height:100%;object-fit:cover;object-position:center center}
+.poster-copy{position:absolute;z-index:21;left:7%;top:17.5%;width:57%;height:57%;display:flex;flex-direction:column;align-items:center;text-align:center;pointer-events:none;color:#fff0d8;text-shadow:0 2px 8px rgba(25,0,28,.9)}
+.poster-title{font-family:'Great Vibes','Cormorant Garamond',serif;font-weight:400;font-size:clamp(46px,12vw,92px);line-height:.82;letter-spacing:0;color:#ffe3a6;text-shadow:0 2px 3px #6c2947,0 0 16px rgba(255,204,113,.55);margin:0}
+.poster-heart{font-family:'Cormorant Garamond',serif;font-size:clamp(36px,8vw,62px);line-height:.95;color:#ffdf9b;margin:7px 0 8px;text-shadow:0 0 12px #ffb95d}
+.poster-subtitle{font:500 clamp(16px,4vw,25px)/1.05 'Cormorant Garamond',Georgia,serif;margin:0 0 7px;color:#fff0d9}
+.poster-divider{width:90%;display:flex;align-items:center;gap:10px;color:#ffd985;margin:0 auto 10px}
+.poster-divider:before,.poster-divider:after{content:'';height:1px;flex:1;background:linear-gradient(90deg,transparent,#ffd985)}
+.poster-divider:after{transform:scaleX(-1)}.poster-divider span{font-size:20px;text-shadow:0 0 10px #ffc65b}
+.poster-countdown{position:absolute;left:7%;top:42%;width:64%;height:10.5%;gap:2%;}
+.poster-time-unit{background:linear-gradient(145deg,rgba(52,0,54,.70),rgba(23,0,36,.63));backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.poster-time-unit strong{font-size:clamp(22px,6.2vw,48px)}
+.poster-message{font:500 clamp(14px,3.4vw,22px)/1.18 'Cormorant Garamond',Georgia,serif;margin:12px 0 0;color:#fff0f6}
+.poster-message span{color:#ffb9e4}
+.poster-open-button{left:9%;top:70%;width:57%;min-height:clamp(36px,8vw,46px)}
+@media(max-width:420px){
+ .poster-art{object-fit:cover;object-position:center center}
+ .poster-copy{left:6.5%;top:18%;width:59%;height:54%}
+ .poster-title{font-size:clamp(44px,12vw,62px)}
+ .poster-heart{font-size:36px;margin:5px 0 6px}
+ .poster-subtitle{font-size:clamp(15px,4vw,19px);line-height:1.02;margin-bottom:5px}
+ .poster-divider{margin-bottom:7px}
+ .poster-countdown{left:6.5%;top:43%;width:64%;height:9.5%;gap:2%}
+ .poster-time-unit{border-radius:9px;padding:1px}
+ .poster-time-unit:before{inset:2px}
+ .poster-time-unit strong{font-size:clamp(20px,6vw,26px);line-height:1}
+ .poster-time-unit span{font-size:clamp(7px,1.9vw,9px);margin-top:4px}
+ .poster-message{font-size:clamp(13px,3.45vw,16px);line-height:1.13;margin-top:10px}
+ .poster-open-button{left:9%;top:70.5%;width:57%;min-height:36px;padding:7px 5px;font-size:13px}
+ .music-toggle{width:36px;height:36px;font-size:22px;right:5%;top:2%}
+}
+@media(min-width:600px){.poster-copy{left:8%;width:55%}.poster-countdown{left:8%;width:59%}.poster-open-button{left:12%;width:50%}}

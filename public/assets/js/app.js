@@ -28,7 +28,9 @@
   if (tg) { tg.ready(); tg.expand(); try { tg.setHeaderColor('#07111f'); tg.setBackgroundColor('#07111f'); } catch (_) {} }
   const $ = (id) => document.getElementById(id);
   const scene = $('scene'), eyebrow = $('eyebrow'), title = $('title'), body = $('body'), next = $('next'), back = $('back'), counter = $('counter'), hint = $('hint'), countdown = $('countdown'), progress = $('progress'), fill = $('progress-fill'), signature = $('signature'), letterStage = $('letter-stage'), envelope = $('envelope');
-  // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
+  // Preview mode: temporarily allow opening every chapter before the birthday.
+  // Set PREVIEW_MODE to false to restore the date lock after approval.
+  const PREVIEW_MODE = true;
   const target = new Date('2026-10-30T00:00:00+05:00');
   const chapters = [
     {eyebrow:'ГЛАВА I · ОТ ВСЕГО СЕРДЦА',title:'Ты особенная',body:'Солнце, иногда мы привыкаем к тому, что хорошие люди есть рядом. И не всегда находим время сказать им, насколько они важны.\n\nСегодня я не хочу оставлять это несказанным. Ты занимаешь особое место в моём сердце, и мне хочется, чтобы ты всегда знала, как много значишь для меня.',button:'Продолжить историю',counter:'01 / 04'},
@@ -44,7 +46,7 @@
     const hours = Math.floor(diff / 3600000); diff %= 3600000;
     const minutes = Math.floor(diff / 60000); const seconds = Math.floor((diff % 60000) / 1000);
     $('days').textContent = String(days).padStart(2,'0'); $('hours').textContent = String(hours).padStart(2,'0'); $('minutes').textContent = String(minutes).padStart(2,'0'); $('seconds').textContent = String(seconds).padStart(2,'0');
-    if (Date.now() >= target.getTime()) {
+    if (!PREVIEW_MODE && Date.now() >= target.getTime()) {
       eyebrow.textContent = '30 ОКТЯБРЯ · ТВОЙ ОСОБЕННЫЙ ДЕНЬ'; title.innerHTML = 'С днём рождения,<br>моё солнышко'; body.textContent = 'Сегодня я хочу подарить тебе несколько слов, которые идут от сердца. Эта маленькая история создана специально для тебя.'; hint.textContent = 'Сегодня всё это — для тебя ❤️'; next.innerHTML = 'Начать нашу историю <span>↗</span>'; countdown.hidden = true;
     }
   }
@@ -54,21 +56,23 @@
     eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть моё письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = c.counter; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal');
   }
   function showCountdown() {
-    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'A LITTLE STORY FOR YOU'; title.innerHTML = 'Моё солнышко,<br>это для тебя'; body.textContent = 'Я приготовил для тебя кое-что особенное. Маленькую историю, в которой каждое слово — от сердца.'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = (Date.now() >= target.getTime() ? 'Начать нашу историю' : 'Открыть мою историю') + ' <span>↗</span>'; scene.classList.add('reveal'); updateCountdown();
+    mode = 'countdown'; letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'A LITTLE STORY FOR YOU'; title.innerHTML = 'Моё солнышко,<br>это для тебя'; body.textContent = 'Я приготовил для тебя кое-что особенное. Маленькую историю, в которой каждое слово — от сердца.'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>↗</span>'; scene.classList.add('reveal'); updateCountdown();
   }
   next.addEventListener('click', () => {
     if (mode === 'story' && chapters[chapterIndex].letter) {
       if (!letterOpened) { letterOpened = true; envelope.classList.add('open'); next.innerHTML = 'Письмо открыто · читать ещё раз <span>♥</span>'; window.setTimeout(() => { body.hidden = false; body.classList.remove('letter-copy-reveal'); void body.offsetWidth; body.classList.add('letter-copy-reveal'); next.innerHTML = 'Прочитать письмо ещё раз <span>↗</span>'; }, 720); } else { body.hidden = false; body.classList.remove('letter-copy-reveal'); void body.offsetWidth; body.classList.add('letter-copy-reveal'); } return;
     }
     if (mode === 'countdown') {
-      if (Date.now() < target.getTime()) { eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА'; title.textContent = 'Самое главное — впереди'; body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️'; countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом'; next.innerHTML = 'Вернуться к отсчёту <span>↗</span>'; mode = 'teaser'; return; }
       showChapter(0); return;
     }
     if (mode === 'teaser') { showCountdown(); return; }
     if (chapterIndex < chapters.length - 1) showChapter(chapterIndex + 1); else showChapter(chapters.length - 1);
   });
-  back.addEventListener('click', showCountdown);
+  back.addEventListener('click', () => {
+    if (mode === 'story' && chapterIndex > 0) showChapter(chapterIndex - 1);
+    else showCountdown();
+  });
   updateCountdown(); setInterval(updateCountdown, 1000);
   // If opened through a Telegram deep link with ?story=1, start at the story screen.
-  if (new URLSearchParams(location.search).get('story') === '1' && Date.now() >= target.getTime()) showChapter(0);
+  if (new URLSearchParams(location.search).get('story') === '1') showChapter(0);
 })();

@@ -8,3 +8,11 @@ This update keeps the existing Mini App structure and romantic content while shi
 - `public/assets/js/app.js` (unchanged app logic, cache version updated in HTML)
 
 Then commit and push to `main`; ensure the GitHub Actions Pages workflow completes successfully. The stylesheet URL is versioned `v=8` to invalidate the old browser cache.
+
+
+## Preview mode (temporary)
+- `PREVIEW_MODE = true` disables the birthday-date lock so all four chapters can be reviewed immediately.
+- The main button label is `Открыть сюрприз`.
+- The Back button returns to the previous chapter; from chapter one it returns to the countdown screen.
+- CSS and JavaScript cache versions were bumped to `v=9`.
+- After approval, set `PREVIEW_MODE = false` in `public/assets/js/app.js` to restore the date lock.

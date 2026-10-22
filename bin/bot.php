@@ -50,6 +50,8 @@ while (true) {
                 $chatId = $message['chat']['id'] ?? null;
                 $fromId = $message['from']['id'] ?? null;
                 $text = trim((string) ($message['text'] ?? ''));
+                $isOwner = AccessGuard::isOwner($fromId);
+                $storyOpen = Story::isBirthdayToday() || $isOwner;
 
                 if ($chatId === null || $text === '') {
                     continue;
@@ -60,7 +62,9 @@ while (true) {
                     continue;
                 }
 
-                if (str_starts_with($text, '/start')) {
+                if (str_starts_with($text, '/start') && $isOwner) {
+                    $bot->sendMessage($chatId, "🔧 Режим автора\n\nТебе всё открыто уже сейчас: история (/story, /restart) и Mini App по кнопке ниже. Получателем ты не записываешься — уведомление 30.10 уйдёт ей.", Countdown::birthdayKeyboard());
+                } elseif (str_starts_with($text, '/start')) {
                     $recipient = [
                         'chat_id' => $chatId,
                         'user_id' => $fromId,
@@ -74,7 +78,7 @@ while (true) {
                     );
                     @chmod($recipientFile, 0600);
 
-                    if (Story::isBirthdayToday()) {
+                    if ($storyOpen) {
                         $chapter = $progress->get($chatId);
                         $bot->sendMessage($chatId, Story::scene($chapter)['text'], Story::keyboard($chapter));
                     } else {
@@ -96,17 +100,19 @@ while (true) {
                         $bot->sendPhoto($chatId, $countdownImage, 'Midnight Romance ✨\nДля моего солнышка ❤️');
                     }
                     $countdownMessage = $bot->sendMessage($chatId, Countdown::message(), Countdown::keyboard());
-                    file_put_contents(
-                        $countdownFile,
-                        json_encode(['chat_id' => $chatId, 'message_id' => (int) ($countdownMessage['message_id'] ?? 0)], JSON_THROW_ON_ERROR),
-                        LOCK_EX
-                    );
-                    @chmod($countdownFile, 0600);
+                    if (!$isOwner) {
+                        file_put_contents(
+                            $countdownFile,
+                            json_encode(['chat_id' => $chatId, 'message_id' => (int) ($countdownMessage['message_id'] ?? 0)], JSON_THROW_ON_ERROR),
+                            LOCK_EX
+                        );
+                        @chmod($countdownFile, 0600);
+                    }
                 } elseif ($text === '/story') {
-                    $chapter = Story::isBirthdayToday() ? $progress->get($chatId) : Story::PROLOGUE;
+                    $chapter = $storyOpen ? $progress->get($chatId) : Story::PROLOGUE;
                     $bot->sendMessage($chatId, Story::scene($chapter)['text'], Story::keyboard($chapter));
                 } elseif ($text === '/restart') {
-                    if (!Story::isBirthdayToday()) {
+                    if (!$storyOpen) {
                         $bot->sendMessage($chatId, 'История откроется 30 октября. Пока можно следить за обратным отсчетом. ❤️', Countdown::keyboard());
                     } else {
                         $progress->reset($chatId);
@@ -125,6 +131,7 @@ while (true) {
                 $callback = $update['callback_query'];
                 $callbackId = (string) ($callback['id'] ?? '');
                 $fromId = $callback['from']['id'] ?? null;
+                $storyOpen = Story::isBirthdayToday() || AccessGuard::isOwner($fromId);
                 $data = (string) ($callback['data'] ?? '');
                 $callbackChatId = $callback['message']['chat']['id'] ?? null;
                 $messageId = $callback['message']['message_id'] ?? null;
@@ -139,7 +146,7 @@ while (true) {
 
                 if ($data === 'refresh_countdown' && $callbackChatId !== null && $messageId !== null) {
                     try {
-                        $isBirthday = Story::isBirthdayToday();
+                        $isBirthday = $storyOpen;
                         $text = $isBirthday ? Countdown::birthdayMessage() : Countdown::message();
                         $keyboard = $isBirthday
                             ? Countdown::birthdayKeyboard()
@@ -150,7 +157,7 @@ while (true) {
                             throw $e;
                         }
                     }
-                    $bot->answerCallbackQuery($callbackId, Story::isBirthdayToday() ? 'С днем рождения, мое солнышко! ❤️' : 'Отсчет обновлен ❤️');
+                    $bot->answerCallbackQuery($callbackId, $storyOpen ? 'С днем рождения, мое солнышко! ❤️' : 'Отсчет обновлен ❤️');
                 } elseif (str_starts_with($data, 'story:') && $callbackChatId !== null) {
                     $requested = substr($data, 6);
                     $valid = [Story::PROLOGUE, Story::CHAPTER_1, Story::CHAPTER_2, Story::CHAPTER_3, Story::LETTER];
@@ -158,7 +165,7 @@ while (true) {
                         $bot->answerCallbackQuery($callbackId, 'Не удалось открыть эту главу.');
                         continue;
                     }
-                    if (!Story::isBirthdayToday()) {
+                    if (!$storyOpen) {
                         $bot->answerCallbackQuery($callbackId, 'История откроется в день рождения. ❤️');
                         continue;
                     }

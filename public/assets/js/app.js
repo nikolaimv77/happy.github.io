@@ -34,9 +34,15 @@
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
   const target = new Date('2026-10-30T00:00:00+05:00');
   // Предпросмотр до дня рождения — только для автора по ссылке с ключом ?preview=solnce3010.
-  const previewMode = new URLSearchParams(location.search).get('preview') === 'solnce3010';
+  // Режим автора: полный доступ в любой день, если Mini App открыт с аккаунта автора в Telegram.
+  const OWNER_TELEGRAM_ID = 33612524;
+  const isOwner = tg?.initDataUnsafe?.user?.id === OWNER_TELEGRAM_ID;
+  let previewMode = new URLSearchParams(location.search).get('preview') === 'solnce3010' || isOwner;
+  // Сдвиг времени для тестов автора (перемотка к полуночи 30.10); у неё всегда 0.
+  let timeOffset = 0;
+  const now = () => Date.now() + timeOffset;
   // Сюрприз закрыт до 30.10.2026 00:00 (Ташкент); в эту минуту бот присылает уведомление.
-  const isLocked = () => Date.now() < target.getTime() && !previewMode;
+  const isLocked = () => now() < target.getTime() && !previewMode;
   const waitScreen = $('wait-screen');
   function showLockNote() {
     if (!waitScreen) return;
@@ -46,7 +52,7 @@
   function closeWait() { waitScreen.hidden = true; document.body.classList.remove('no-scroll'); if (posterOpen) posterOpen.focus(); }
   function updateWaitLeft() {
     const el = $('wait-left'); if (!el) return;
-    const diff = Math.max(0, target.getTime() - Date.now()), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000), m = Math.floor(diff % 3600000 / 60000);
+    const diff = Math.max(0, target.getTime() - now()), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000), m = Math.floor(diff % 3600000 / 60000);
     const parts = []; if (d) parts.push(d + ' ' + plural(d, unitWords.days)); if (h) parts.push(h + ' ' + plural(h, unitWords.hours)); parts.push(m + ' ' + plural(m, unitWords.minutes));
     el.textContent = 'Осталось ' + parts.join(' ');
   }
@@ -94,7 +100,7 @@
   const burstFrom = (el) => { if (!el) return; const r = el.getBoundingClientRect(); burst(r.left + r.width / 2, r.top + r.height / 2); };
   function updateCountdown() {
     syncLock();
-    const now = Date.now(); let diff = Math.max(0, target.getTime() - now);
+    let diff = Math.max(0, target.getTime() - now());
     const days = Math.floor(diff / 86400000); diff %= 86400000;
     const hours = Math.floor(diff / 3600000); diff %= 3600000;
     const minutes = Math.floor(diff / 60000); const seconds = Math.floor((diff % 60000) / 1000);
@@ -104,7 +110,7 @@
       const label = plural(value, unitWords[key]);
       for (const id of [key + '-label', 'poster-' + key + '-label']) { const l = $(id); if (l) l.textContent = label; }
     }
-    if (Date.now() >= target.getTime() && !document.body.classList.contains('is-birthday')) {
+    if (now() >= target.getTime() && !document.body.classList.contains('is-birthday')) {
       document.body.classList.add('is-birthday');
       const posterSubtitle = $('poster-subtitle'), posterCountdown = $('poster-countdown');
       if (posterSubtitle) posterSubtitle.innerHTML = 'Сегодня твой день!<br>С днем рождения,<br>моя любимая';
@@ -133,7 +139,7 @@
       return;
     }
     if (mode === 'countdown') {
-      if (Date.now() < target.getTime() && !previewMode) { eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА'; title.textContent = 'Самое главное — впереди'; body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️'; countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом'; next.innerHTML = 'Вернуться к отсчету <span>↗</span>'; mode = 'teaser'; return; }
+      if (now() < target.getTime() && !previewMode) { eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА'; title.textContent = 'Самое главное — впереди'; body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️'; countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом'; next.innerHTML = 'Вернуться к отсчету <span>↗</span>'; mode = 'teaser'; return; }
       showChapter(0); return;
     }
     if (mode === 'teaser') { showCountdown(); return; }
@@ -300,14 +306,15 @@
 
   // ---------- Письмо «Открой через год»: заблокировано до 30.10.2027 00:00 ----------
   const futureTarget = new Date('2027-10-30T00:00:00+05:00');
+  let futureForceOpen = false;
   const future = $('future');
   function renderFuture() {
-    const open = Date.now() >= futureTarget.getTime() || previewMode;
+    const open = now() >= futureTarget.getTime() || futureForceOpen;
     $('future-locked').hidden = open; $('future-text').hidden = !open;
     $('future-eyebrow').textContent = open ? '30 · 10 · 2027 · ПРОШЕЛ ГОД' : 'ПИСЬМО В БУДУЩЕЕ';
     $('future-close').innerHTML = open ? 'Обнять тебя <span>♥</span>' : 'Буду ждать <span>♡</span>';
     if (!open) {
-      const diff = futureTarget.getTime() - Date.now(), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000);
+      const diff = futureTarget.getTime() - now(), d = Math.floor(diff / 86400000), h = Math.floor(diff % 86400000 / 3600000);
       $('future-left').textContent = 'Откроется через ' + d + ' ' + plural(d, unitWords.days) + (h ? ' ' + h + ' ' + plural(h, unitWords.hours) : '');
     }
   }
@@ -351,6 +358,42 @@
     const hide = () => { splash.classList.add('done'); window.setTimeout(() => splash.remove(), 700); };
     Promise.race([Promise.all([imgReady, fontsReady]), new Promise((r) => window.setTimeout(r, 4000))]).then(hide);
   }
+  // ---------- Панель автора (видна только автору) ----------
+  if (isOwner || new URLSearchParams(location.search).get('preview') === 'solnce3010') {
+    const panel = document.createElement('div'); panel.className = 'owner-panel';
+    panel.innerHTML = `<button class="owner-toggle" type="button" aria-expanded="false" aria-label="Панель автора">🔧</button>
+      <div class="owner-menu" hidden>
+        <p class="owner-hint">Это видишь только ты</p>
+        <button type="button" data-act="full">Полный доступ: <b>вкл</b></button>
+        <button type="button" data-act="midnight">⏩ 10 секунд до 00:00 30.10</button>
+        <button type="button" data-act="birthday">🎂 Сразу день рождения</button>
+        <button type="button" data-act="real">🕐 Реальное время</button>
+        <button type="button" data-act="future">💌 Письмо через год: <b>закрыто</b></button>
+        <button type="button" data-act="finale">🎆 Показать финал</button>
+        <button type="button" data-act="hearts">♥ Сбросить сердечки</button>
+      </div>`;
+    document.body.appendChild(panel); document.body.classList.add('has-owner');
+    const menu = panel.querySelector('.owner-menu'), toggle = panel.querySelector('.owner-toggle');
+    const label = (act, text) => { panel.querySelector(`[data-act="${act}"] b`).textContent = text; };
+    const subtitleHTML = $('poster-subtitle').innerHTML, openHTML = posterOpen.innerHTML;
+    const resetBirthday = () => {
+      document.body.classList.remove('is-birthday'); lastLocked = null;
+      $('poster-subtitle').innerHTML = subtitleHTML; $('poster-countdown').hidden = false; posterOpen.innerHTML = openHTML;
+      $('cake').hidden = true; document.querySelectorAll('.candle').forEach((c) => c.classList.remove('out')); $('cake-hint').textContent = 'Загадай желание и задуй свечи';
+    };
+    toggle.addEventListener('click', () => { menu.hidden = !menu.hidden; toggle.setAttribute('aria-expanded', String(!menu.hidden)); });
+    menu.addEventListener('click', (e) => {
+      const act = e.target.closest('button')?.dataset.act; if (!act) return;
+      if (act === 'full') { previewMode = !previewMode; label('full', previewMode ? 'вкл' : 'выкл — как увидит она'); lastLocked = null; updateCountdown(); }
+      if (act === 'midnight') { timeOffset = target.getTime() - 10000 - Date.now(); previewMode = false; label('full', 'выкл — как увидит она'); resetBirthday(); if (storyShell && !storyShell.hidden) { storyShell.hidden = true; poster.hidden = false; } updateCountdown(); menu.hidden = true; }
+      if (act === 'birthday') { timeOffset = target.getTime() + 60000 - Date.now(); resetBirthday(); updateCountdown(); menu.hidden = true; }
+      if (act === 'real') { location.reload(); }
+      if (act === 'future') { futureForceOpen = !futureForceOpen; label('future', futureForceOpen ? 'открыто' : 'закрыто'); }
+      if (act === 'finale') { openFinale(); menu.hidden = true; }
+      if (act === 'hearts') { try { localStorage.removeItem(HEARTS_KEY); } catch (_) {} foundHearts = new Set(); renderHearts(); if (mode === 'story') placeHeart(chapterIndex); }
+    });
+  }
+
   // If opened through a Telegram deep link with ?story=1, start at the story screen.
   const params = new URLSearchParams(location.search);
   if (params.get('story') === '1' && !isLocked()) { openStoryApp(); showCountdown(); }

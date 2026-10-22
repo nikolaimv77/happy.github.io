@@ -58,7 +58,6 @@ final class TelegramBot
         $response = curl_exec($curl);
         $status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $error = curl_error($curl);
-        curl_close($curl);
 
         if ($response === false) {
             throw new RuntimeException("Telegram photo upload failed: {$error}");
@@ -128,7 +127,6 @@ final class TelegramBot
         $response = curl_exec($curl);
         $status = (int) curl_getinfo($curl, CURLINFO_HTTP_CODE);
         $error = curl_error($curl);
-        curl_close($curl);
 
         if ($response === false) {
             throw new RuntimeException("Telegram connection failed: {$error}");

@@ -451,4 +451,16 @@ body.no-scroll{overflow:hidden}
 @keyframes caught{to{transform:scale(2.4);opacity:0}}
 @keyframes badge-pop{0%,100%{transform:translateX(-50%) scale(1)}40%{transform:translateX(-50%) scale(1.08)}}
 
+/* ---------- Панель автора ---------- */
+.owner-panel{position:fixed;z-index:95;left:10px;top:max(10px,env(safe-area-inset-top));font-family:var(--sans)}
+.owner-toggle{width:38px;height:38px;padding:0;border-radius:50%;font-size:16px!important;border:1px dashed var(--gold-line);background:rgba(34,0,31,.85);color:var(--gold-light);font:600 12px var(--sans);cursor:pointer}
+.owner-menu{position:absolute;left:0;top:calc(100% + 8px);width:250px;display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:16px;
+  border:1px solid var(--gold-line);background:rgba(34,0,31,.95);box-shadow:0 14px 34px rgba(0,0,0,.55)}
+.owner-menu button{padding:9px 10px;border-radius:10px;border:1px solid rgba(202,179,230,.25);background:rgba(122,55,118,.35);color:var(--cream);font:500 12.5px var(--sans);text-align:left;cursor:pointer}
+.owner-menu button:active{transform:scale(.98)}
+.owner-menu b{color:var(--gold-light)}
+.has-owner .hearts-badge{max-width:calc(100% - 110px)}
+.has-owner .hearts-text{font-size:10px}
+.owner-hint{margin:0 0 2px;font:600 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--lavender)}
+
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

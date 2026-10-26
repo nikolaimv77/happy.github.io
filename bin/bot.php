@@ -63,7 +63,7 @@ while (true) {
                 }
 
                 if (str_starts_with($text, '/start') && $isOwner) {
-                    $bot->sendMessage($chatId, "🔧 Режим автора\n\nТебе всё открыто уже сейчас: история (/story, /restart) и Mini App по кнопке ниже. Получателем ты не записываешься — уведомление 30.10 уйдёт ей.", Countdown::birthdayKeyboard());
+                    $bot->sendMessage($chatId, "🔧 Режим автора\n\nТебе все открыто уже сейчас: история (/story, /restart) и Mini App по кнопке ниже. Получателем ты не записываешься — уведомление 30.10 уйдет ей.", Countdown::birthdayKeyboard());
                 } elseif (str_starts_with($text, '/start')) {
                     $recipient = [
                         'chat_id' => $chatId,

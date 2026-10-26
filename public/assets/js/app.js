@@ -33,7 +33,7 @@
   const scene = $('scene'), eyebrow = $('eyebrow'), title = $('title'), body = $('body'), next = $('next'), back = $('back'), counter = $('counter'), hint = $('hint'), countdown = $('countdown'), progress = $('progress'), fill = $('progress-fill'), signature = $('signature'), letterStage = $('letter-stage'), envelope = $('envelope');
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
   const target = new Date('2026-10-30T00:00:00+05:00');
-  // Предпросмотр до дня рождения — только для автора по ссылке с ключом ?preview=solnce3010.
+  // Предпросмотр до дня рождения - только для автора по ссылке с ключом ?preview=solnce3010.
   // Режим автора: полный доступ в любой день, если Mini App открыт с аккаунта автора в Telegram.
   const OWNER_TELEGRAM_ID = 33612524;
   const isOwner = tg?.initDataUnsafe?.user?.id === OWNER_TELEGRAM_ID;
@@ -68,7 +68,7 @@
     {eyebrow:'МОЕМУ СОЛНЫШКУ · С ЛЮБОВЬЮ',title:'С днем рождения, мое солнце',body:'Мое любимое солнце.\n\nС днем рождения тебя. ❤️\n\nСегодня мне хочется, чтобы ты хотя бы на мгновение остановилась и почувствовала, насколько ты важна. Иногда самые искренние чувства непросто выразить словами, но самое главное оказывается гораздо проще.\n\nЯ рад, что ты есть в моей жизни.\n\nМне хочется, чтобы ты чаще улыбалась, чтобы твои глаза светились от счастья, чтобы у тебя исполнялись желания, о которых ты пока никому не рассказываешь. Хочу, чтобы ты берегла себя, не забывала о своих мечтах и всегда находила время для того, что делает тебя счастливой.\n\nА еще мне хочется дарить тебе тепло не только в праздники. В обычные дни, когда нет особого повода, когда достаточно одного доброго слова, объятия или просто ощущения, что рядом есть близкий человек.\n\nЯ не знаю, какими будут все наши завтрашние дни. Но я знаю, что хочу наполнять их хорошими моментами вместе с тобой, радовать тебя и находить новые причины говорить тебе, как ты мне дорога.\n\nПусть новый год твоей жизни будет добрым к тебе. Пусть в нем будет много света, здоровья, душевного спокойствия, любви и счастливых мгновений.\n\nСпасибо тебе за то, что ты есть. Крепко обнимаю тебя. ❤️\n\nТвой человек.',button:'Прочитать письмо еще раз',counter:'04 / 04',letter:true}
   ];
   chapters.splice(3, 0,
-    {eyebrow:'ГЛАВА IV · ФОТО',title:'Ты — мое вдохновение',body:'Я храню эти кадры не потому, что на них красивые горы.\nА потому, что на них — ты.',button:'Почему я тебя люблю',gallery:true},
+    {eyebrow:'ГЛАВА IV · ФОТО',title:'Ты - мое вдохновение',body:'Я храню эти кадры не потому, что на них красивые горы.\nА потому, что на них - ты.',button:'Почему я тебя люблю',gallery:true},
     {eyebrow:'ГЛАВА V · ПРИЧИНЫ',title:'Почему я тебя люблю',body:'Нажми на каждую карточку ♥',button:'Открыть мое письмо',reasons:true}
   );
   const gallery = $('gallery'), reasonsBox = $('reasons'), secretHeart = $('secret-heart');
@@ -119,14 +119,25 @@
       if (posterOpen) posterOpen.innerHTML = 'Открыть поздравление <span>♡</span>';
       window.setTimeout(() => { burst(window.innerWidth / 2, window.innerHeight / 2, 28); confettiRain(70); }, 600);
       if (eyebrow) eyebrow.textContent = '30 ОКТЯБРЯ · ТВОЙ ОСОБЕННЫЙ ДЕНЬ';
-      if (hint) hint.textContent = 'Сегодня все это — для тебя ❤️';
-      if (next) next.innerHTML = 'Начать поздравление <span>↗</span>';
+      if (hint) hint.textContent = 'Сегодня все это - для тебя ❤️';
+      if (next) next.innerHTML = 'Начать поздравление';
     }
   }
   function showChapter(index) {
     chapterIndex = index; mode = 'story'; const c = chapters[index];
     scene.classList.remove('reveal','letter'); void scene.offsetWidth; if (c.letter) scene.classList.add('letter');
-    eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) { envelope.classList.remove('open'); next.innerHTML = 'Открыть мое письмо <span>♥</span>'; } else { next.innerHTML = c.button + ' <span>↗</span>'; } counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(chapters.length).padStart(2, '0'); gallery.hidden = !c.gallery; reasonsBox.hidden = !c.reasons; secretHeart.hidden = true; window.clearTimeout(typingTimer); if (c.gallery) gallery.querySelector('.gallery-track').scrollLeft = 0; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal'); placeHeart(index);
+    eyebrow.textContent = c.eyebrow; title.textContent = c.title; body.textContent = c.body; letterOpened = false; letterStage.hidden = !c.letter; body.hidden = Boolean(c.letter); if (c.letter) {
+      envelope.classList.remove('open');
+      next.innerHTML = 'Открыть мое письмо <span>♥</span>';
+    } else {
+      next.innerHTML = c.button;
+    }
+    counter.textContent = String(index + 1).padStart(2, '0') + ' / ' + String(chapters.length).padStart(2, '0');
+    gallery.hidden = !c.gallery;
+    reasonsBox.hidden = !c.reasons;
+    secretHeart.hidden = true;
+    window.clearTimeout(typingTimer);
+    if (c.gallery) gallery.querySelector('.gallery-track').scrollLeft = 0; hint.hidden = true; countdown.hidden = true; progress.hidden = false; fill.style.width = `${((index+1)/chapters.length)*100}%`; back.hidden = false; signature.textContent = 'Создано специально для тебя ♥'; scene.classList.add('reveal'); placeHeart(index);
   }
   function showCountdown() {
     mode = 'countdown'; placeHeart(-1); gallery.hidden = true; reasonsBox.hidden = true; secretHeart.hidden = true; window.clearTimeout(typingTimer); letterStage.hidden = true; body.hidden = false; scene.classList.remove('letter','reveal'); void scene.offsetWidth; eyebrow.textContent = 'ДО ТВОЕГО ОСОБЕННОГО ДНЯ ОСТАЛОСЬ'; title.innerHTML = 'Мое<br>солнышко'; body.innerHTML = 'С каждым днем<br>я все больше понимаю,<br>как мне повезло, что ты есть<br>в моей жизни <span class="pink-heart">♥</span>'; hint.hidden = false; countdown.hidden = false; progress.hidden = true; back.hidden = true; signature.innerHTML = 'Создано специально для тебя <span>♥</span>'; counter.textContent = '30 · 10 · 2026'; next.innerHTML = 'Открыть сюрприз <span>♡</span>'; scene.classList.add('reveal'); updateCountdown();
@@ -139,7 +150,15 @@
       return;
     }
     if (mode === 'countdown') {
-      if (now() < target.getTime() && !previewMode) { eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА'; title.textContent = 'Самое главное — впереди'; body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️'; countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом'; next.innerHTML = 'Вернуться к отсчету <span>↗</span>'; mode = 'teaser'; return; }
+      if (now() < target.getTime() && !previewMode) {
+        eyebrow.textContent = 'МАЛЕНЬКАЯ ПОДСКАЗКА';
+        title.textContent = 'Самое главное - впереди';
+        body.textContent = 'Это не просто поздравление. Я хочу подарить тебе несколько слов, которые идут от сердца. А самое главное ты узнаешь 30 октября. ❤️';
+        countdown.hidden = true; hint.textContent = 'Пусть это пока останется нашим маленьким секретом';
+        next.innerHTML = 'Вернуться к отсчету';
+        mode = 'teaser';
+        return;
+      }
       showChapter(0); return;
     }
     if (mode === 'teaser') { showCountdown(); return; }
@@ -150,11 +169,11 @@
   waitScreen.addEventListener('click', (e) => { if (e.target === waitScreen) closeWait(); });
   setInterval(() => { if (!waitScreen.hidden) updateWaitLeft(); }, 1000);
 
-  // ---------- 2. Письмо печатается на глазах (касание — показать сразу) ----------
+  // ---------- 2. Письмо печатается на глазах (касание - показать сразу) ----------
   function typeLetter(instant) {
     const text = chapters[chapters.length - 1].body; let i = 0;
     window.clearTimeout(typingTimer); body.hidden = false; body.textContent = ''; body.classList.add('typing'); secretHeart.hidden = true;
-    const finish = () => { window.clearTimeout(typingTimer); body.textContent = text; body.classList.remove('typing'); next.innerHTML = 'Прочитать письмо еще раз <span>↗</span>'; secretHeart.hidden = false; };
+    const finish = () => { window.clearTimeout(typingTimer); body.textContent = text; body.classList.remove('typing'); next.innerHTML = 'Прочитать письмо еще раз'; secretHeart.hidden = false; };
     if (instant === true || reduceMotion) { finish(); return; }
     next.innerHTML = 'Показать письмо целиком <span>↓</span>';
     const step = () => { i = Math.min(text.length, i + 2); body.textContent = text.slice(0, i); if (i >= text.length) { finish(); return; } const ch = text[i - 1]; typingTimer = window.setTimeout(step, ch === '\n' ? 160 : /[.,!?]/.test(ch) ? 90 : 22); };
@@ -164,13 +183,13 @@
 
   // ---------- 1. Галерея ----------
   const photos = [
-    {src:'photo-1.webp', caption:'Ты смотришь вдаль, а я — на тебя'},
+    {src:'photo-1.webp', caption:'Ты смотришь вдаль, а я - на тебя'},
     {src:'photo-2.webp', caption:'Сильная и нежная одновременно'},
-    {src:'photo-3.webp', caption:'Весь мир — у твоих ног'},
+    {src:'photo-3.webp', caption:'Весь мир - у твоих ног'},
     {src:'photo-4.webp', caption:'Свободная, как ветер в горах'},
     {src:'photo-5.webp', caption:'Моя королева гор'},
     {src:'photo-6.webp', caption:'Даже древние башни не так прекрасны'},
-    {src:'photo-7.webp', caption:'Город в огнях, а самый яркий свет — ты'}
+    {src:'photo-7.webp', caption:'Город в огнях, а самый яркий свет - ты'}
   ].map((p) => ({...p, src:'./assets/images/gallery/' + p.src}));
   const track = $('gallery-track'), dots = $('gallery-dots');
   photos.forEach((p, i) => {
@@ -190,7 +209,7 @@
   };
   track.addEventListener('scroll', () => window.requestAnimationFrame(syncDots), {passive:true}); syncDots();
 
-  // Фотогалерея открыта всегда — даже до 30.10, когда сам сюрприз еще закрыт.
+  // Фотогалерея открыта всегда - даже до 30.10, когда сам сюрприз еще закрыт.
   const posterGallery = $('poster-gallery');
   if (posterGallery) posterGallery.addEventListener('click', () => openLightbox(0));
   const lightbox = $('lightbox'), lbImg = $('lightbox-img'), lbCap = $('lightbox-caption'), lbCount = $('lightbox-count');
@@ -216,11 +235,11 @@
 
   // ---------- 4. «Почему я тебя люблю» ----------
   const reasons = [
-    ['☀', 'Твоя улыбка', 'Она делает любой день теплее — даже самый пасмурный.'],
+    ['☀', 'Твоя улыбка', 'Она делает любой день теплее - даже самый пасмурный.'],
     ['✦', 'Твоя сила', 'Ты справляешься с тем, что другим не под силу, и остаешься нежной.'],
     ['♡', 'Твоя забота', 'Рядом с тобой хочется быть лучше и спокойнее.'],
     ['❀', 'Твой взгляд', 'В нем столько света, что я каждый раз теряюсь.'],
-    ['⛰', 'Твоя смелость', 'Ты поднимаешься на вершины — и тянешь меня за собой.'],
+    ['⛰', 'Твоя смелость', 'Ты поднимаешься на вершины - и тянешь меня за собой.'],
     ['∞', 'Просто ты', 'Мне не нужна причина. Я люблю тебя целиком.']
   ];
   reasons.forEach(([icon, front, back], i) => {
@@ -280,7 +299,7 @@
   try { foundHearts = new Set(JSON.parse(localStorage.getItem(HEARTS_KEY) || '[]')); } catch (_) {}
   function renderHearts() {
     heartsDots.innerHTML = heartSpots.map((_, i) => `<i class="${foundHearts.has(i) ? 'on' : ''}">♥</i>`).join('');
-    heartsText.textContent = foundHearts.size >= heartSpots.length ? 'Все сердечки найдены — открыть бонус' : `Найди спрятанные сердечки · ${foundHearts.size} из ${heartSpots.length}`;
+    heartsText.textContent = foundHearts.size >= heartSpots.length ? 'Все сердечки найдены - открыть бонус' : `Найди спрятанные сердечки · ${foundHearts.size} из ${heartSpots.length}`;
     heartsBadge.classList.toggle('complete', foundHearts.size >= heartSpots.length);
   }
   function placeHeart(index) {
@@ -343,7 +362,7 @@
   }
   document.querySelectorAll('.candle').forEach((c) => c.addEventListener('click', (e) => {
     if (c.classList.contains('out')) return; c.classList.add('out'); burst(e.clientX, e.clientY, 6);
-    if ([...document.querySelectorAll('.candle')].every((x) => x.classList.contains('out'))) { $('cake-hint').textContent = 'Желание загадано — пусть сбудется ✨'; confettiRain(90); }
+    if ([...document.querySelectorAll('.candle')].every((x) => x.classList.contains('out'))) { $('cake-hint').textContent = 'Желание загадано - пусть сбудется ✨'; confettiRain(90); }
   }));
   if (envelope) envelope.addEventListener('click', () => { if (!letterOpened) next.click(); });
   document.querySelectorAll('.flourish-heart .heart').forEach((h) => h.closest('svg').addEventListener('click', (e) => burst(e.clientX, e.clientY, 10)));
@@ -384,8 +403,8 @@
     toggle.addEventListener('click', () => { menu.hidden = !menu.hidden; toggle.setAttribute('aria-expanded', String(!menu.hidden)); });
     menu.addEventListener('click', (e) => {
       const act = e.target.closest('button')?.dataset.act; if (!act) return;
-      if (act === 'full') { previewMode = !previewMode; label('full', previewMode ? 'вкл' : 'выкл — как увидит она'); lastLocked = null; updateCountdown(); }
-      if (act === 'midnight') { timeOffset = target.getTime() - 10000 - Date.now(); previewMode = false; label('full', 'выкл — как увидит она'); resetBirthday(); if (storyShell && !storyShell.hidden) { storyShell.hidden = true; poster.hidden = false; } updateCountdown(); menu.hidden = true; }
+      if (act === 'full') { previewMode = !previewMode; label('full', previewMode ? 'вкл' : 'выкл - как увидит она'); lastLocked = null; updateCountdown(); }
+      if (act === 'midnight') { timeOffset = target.getTime() - 10000 - Date.now(); previewMode = false; label('full', 'выкл - как увидит она'); resetBirthday(); if (storyShell && !storyShell.hidden) { storyShell.hidden = true; poster.hidden = false; } updateCountdown(); menu.hidden = true; }
       if (act === 'birthday') { timeOffset = target.getTime() + 60000 - Date.now(); resetBirthday(); updateCountdown(); menu.hidden = true; }
       if (act === 'real') { location.reload(); }
       if (act === 'future') { futureForceOpen = !futureForceOpen; label('future', futureForceOpen ? 'открыто' : 'закрыто'); }

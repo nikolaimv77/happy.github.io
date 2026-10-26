@@ -30,7 +30,21 @@
     const bar = $('music-bar');
     music.addEventListener('timeupdate', () => { if (bar && music.duration) bar.style.width = (music.currentTime / music.duration * 100).toFixed(2) + '%'; });
   }
-  const scene = $('scene'), eyebrow = $('eyebrow'), title = $('title'), body = $('body'), next = $('next'), back = $('back'), counter = $('counter'), hint = $('hint'), countdown = $('countdown'), progress = $('progress'), fill = $('progress-fill'), signature = $('signature'), letterStage = $('letter-stage'), envelope = $('envelope');
+  const scene = $('scene'),
+      eyebrow = $('eyebrow'),
+      title = $('title'),
+      body = $('body'),
+      next = $('next'),
+      back = $('back'),
+      counter = $('counter'),
+      hint = $('hint'),
+      countdown = $('countdown'),
+      progress = $('progress'),
+      fill = $('progress-fill'),
+      signature = $('signature'),
+      letterStage = $('letter-stage'),
+      envelope = $('envelope');
+
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
   const target = new Date('2026-10-30T00:00:00+05:00');
   // Предпросмотр до дня рождения - только для автора по ссылке с ключом ?preview=solnce3010.
@@ -63,21 +77,21 @@
   }
   const chapters = [
     {
-      eyebrow:'ГЛАВА I · ОТ ВСЕГО СЕРДЦА',
+      eyebrow:'ОТ ВСЕГО СЕРДЦА',
       title:'Ты особенная',
       body:'Солнце, иногда мы привыкаем к тому, что хорошие люди есть рядом. И не всегда находим время сказать им, насколько они важны.\n\nСегодня я не хочу оставлять это несказанным. Ты занимаешь особое место в моем сердце, и мне хочется, чтобы ты всегда знала, как много значишь для меня.',
-      button:'Продолжить историю',
+      button:'Продолжить',
       counter:'01 / 04'
     },
     {
-      eyebrow:'ГЛАВА II · МОЕ СОЛНЫШКО',
+      eyebrow:'МОЕ СОЛНЫШКО',
       title:'Почему я так тебя называю',
       body:'В слове «солнышко» есть что-то очень простое и настоящее: свет, тепло, уют. Что-то, к чему хочется возвращаться.\n\nЯ не обещаю, что каждый день будет идеальным. Но хочу, чтобы рядом со мной у тебя было больше поводов улыбаться, больше спокойствия и больше уверенности в том, что тебя любят.',
       button:'Еще несколько слов',
       counter:'02 / 04'
     },
     {
-      eyebrow:'ГЛАВА III · МОЕ ЖЕЛАНИЕ',
+      eyebrow:'МОЕ ЖЕЛАНИЕ',
       title:'Пусть впереди будет много хорошего',
       body:'Я желаю тебе не только счастья, здоровья и исполнения желаний. Хочу, чтобы ты чаще чувствовала себя счастливой в самых обычных моментах.\n\nПусть у тебя хватает сил на важное, времени на то, что радует, и спокойствия для того, что нельзя изменить. И пусть в твоей жизни всегда будет место для нежности, смеха и любви.',
       button:'Смотреть фото',
@@ -93,10 +107,19 @@
     }
 
   ];
-  chapters.splice(3, 0,
-    {eyebrow:'ГЛАВА IV · ФОТО',title:'Ты - мое вдохновение',body:'Я храню эти кадры не потому, что на них красивые горы.\nА потому, что на них - ты.',button:'Почему я тебя люблю',gallery:true},
-    {eyebrow:'ГЛАВА V · ПРИЧИНЫ',title:'Почему я тебя люблю',body:'Нажми на каждую карточку ♥',button:'Открыть мое письмо',reasons:true}
-  );
+  chapters.splice(3, 0, {
+      eyebrow:'ФОТО',
+      title:'Ты - мое вдохновение',
+      body:'Я храню эти кадры не потому, что на них красивые горы.\nА потому, что на них - ты.',
+      button:'Почему я тебя люблю',
+      gallery:true
+  }, {
+      eyebrow:'ПРИЧИНЫ',
+      title:'Почему я тебя люблю',
+      body:'Нажми на каждую карточку ♥',
+      button:'Открыть мое письмо',
+      reasons:true
+  });
   const gallery = $('gallery'), reasonsBox = $('reasons'), secretHeart = $('secret-heart');
   let typingTimer = 0;
   let mode = 'countdown', chapterIndex = 0, letterOpened = false;
@@ -217,6 +240,7 @@
     {src:'photo-6.webp', caption:'Даже древние башни не так прекрасны'},
     {src:'photo-7.webp', caption:'Город в огнях, а самый яркий свет - ты'}
   ].map((p) => ({...p, src:'./assets/images/gallery/' + p.src}));
+
   const track = $('gallery-track'), dots = $('gallery-dots');
   photos.forEach((p, i) => {
     const fig = document.createElement('figure'); fig.className = 'polaroid'; fig.style.setProperty('--tilt', (i % 2 ? 2.2 : -2.2) + 'deg');

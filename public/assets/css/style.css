@@ -470,7 +470,7 @@ body.no-scroll{overflow:hidden}
 /* ---------- Рукописные золотые заголовки: место под завитки ----------
    Градиент закрашивает текст только внутри блока, поэтому высокие буквы (Б, Т, д)
    срезались сверху. Даём блоку запас и компенсируем его отрицательным отступом. */
-.poster-title,.content h1,.wait-card h2,.secret-card h2,.finale-title,.lightbox-figure figcaption{padding:.22em .18em .1em;margin-top:-.2em}
+.poster-title,.content h1,.wait-card h2,.secret-card h2,.finale-title,.lightbox-figure figcaption{padding:.42em .28em .16em;margin-top:-.38em}
 .secret-card h2{margin-bottom:6px}
 
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

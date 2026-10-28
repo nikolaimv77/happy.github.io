@@ -58,7 +58,8 @@ while (true) {
                 }
 
                 if (!AccessGuard::allows($fromId)) {
-                    $bot->sendMessage($chatId, 'Этот подарок приготовлен для одного особенного человека. ❤️');
+                    // Guests see only the countdown: no story, no Mini App, never saved as the recipient.
+                    $bot->sendMessage($chatId, Countdown::guestMessage(), Countdown::guestKeyboard());
                     continue;
                 }
 
@@ -140,7 +141,18 @@ while (true) {
                     continue;
                 }
                 if (!AccessGuard::allows($fromId)) {
-                    $bot->answerCallbackQuery($callbackId, 'Этот подарок приготовлен для одного особенного человека. ❤️');
+                    if ($data === 'refresh_countdown' && $callbackChatId !== null && $messageId !== null) {
+                        try {
+                            $bot->editMessageText($callbackChatId, (int) $messageId, Countdown::guestMessage(), Countdown::guestKeyboard());
+                        } catch (Throwable $e) {
+                            if (!str_contains($e->getMessage(), 'message is not modified')) {
+                                throw $e;
+                            }
+                        }
+                        $bot->answerCallbackQuery($callbackId, 'Отсчёт обновлён ❤️');
+                    } else {
+                        $bot->answerCallbackQuery($callbackId, 'Этот сюрприз приготовлен для одного особенного человека. ❤️');
+                    }
                     continue;
                 }
 
@@ -179,22 +191,32 @@ while (true) {
             }
         }
 
-        // At midnight send a NEW message: edits are silent, a new message rings the phone.
+        // At midnight send a NEW message to her: edits are silent, a new message rings the phone.
+        // A private chat id equals the user id, so it works even if recipient.json holds someone else.
         $sentMarker = Countdown::birthdaySentMarker($storage);
-        if (Story::isBirthdayToday() && !is_file($sentMarker) && is_file($recipientFile)) {
-            $recipient = json_decode((string) file_get_contents($recipientFile), true);
-            if (is_array($recipient) && !empty($recipient['chat_id']) && AccessGuard::allows($recipient['user_id'] ?? null)) {
-                try {
-                    $bot->sendMessage($recipient['chat_id'], Countdown::birthdayMessage(), Countdown::birthdayKeyboard());
-                    file_put_contents($sentMarker, json_encode([
-                        'sent_at' => date(DATE_ATOM),
-                        'chat_id' => $recipient['chat_id'],
-                        'by' => 'bot',
-                    ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX);
-                    @chmod($sentMarker, 0600);
-                    printf("[%s] Birthday notification sent.\n", date(DATE_ATOM));
-                } catch (Throwable $e) {
-                    fwrite(STDERR, '[' . date(DATE_ATOM) . '] Birthday notification: ' . $e->getMessage() . PHP_EOL);
+        $recipientId = AccessGuard::recipientId();
+        if (Story::isBirthdayToday() && !is_file($sentMarker) && $recipientId !== '') {
+            $ownerId = trim((string) ($_ENV['OWNER_TELEGRAM_USER_ID'] ?? ''));
+            try {
+                $bot->sendMessage($recipientId, Countdown::birthdayMessage(), Countdown::birthdayKeyboard());
+                file_put_contents($sentMarker, json_encode([
+                    'sent_at' => date(DATE_ATOM),
+                    'chat_id' => $recipientId,
+                    'by' => 'bot',
+                ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX);
+                @chmod($sentMarker, 0600);
+                printf("[%s] Birthday notification sent.\n", date(DATE_ATOM));
+                if ($ownerId !== '') {
+                    $bot->sendMessage($ownerId, '✅ Уведомление ей отправлено в ' . date('H:i:s') . '.');
+                }
+            } catch (Throwable $e) {
+                fwrite(STDERR, '[' . date(DATE_ATOM) . '] Birthday notification: ' . $e->getMessage() . PHP_EOL);
+                if ($ownerId !== '' && !is_file($sentMarker . '.warned')) {
+                    @file_put_contents($sentMarker . '.warned', date(DATE_ATOM));
+                    try {
+                        $bot->sendMessage($ownerId, '⚠️ Не удалось отправить ей уведомление: ' . $e->getMessage() . "\nСкорее всего, она ещё ни разу не нажимала /start в боте.");
+                    } catch (Throwable) {
+                    }
                 }
             }
         }

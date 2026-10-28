@@ -15,26 +15,17 @@ $timezone = new DateTimeZone($_ENV['APP_TIMEZONE'] ?? 'Asia/Tashkent');
 date_default_timezone_set($timezone->getName());
 
 $storage = $root . '/storage';
-$recipientFile = $storage . '/recipient.json';
 // The token may come from .env or from the environment (e.g. macOS Keychain via bin/start-bot.sh).
 $token = (string) ($_ENV['TELEGRAM_BOT_TOKEN'] ?? '') ?: (string) getenv('TELEGRAM_BOT_TOKEN');
 $dryRun = ($_ENV['ENABLE_REAL_BIRTHDAY_SEND'] ?? '0') !== '1';
 
-if (!is_file($recipientFile)) {
-    fwrite(STDERR, "No recipient found. Ask the recipient to open the bot and press /start first.\n");
+// Always send to ALLOWED_TELEGRAM_USER_ID: in a private chat the chat id equals the user id.
+$recipientId = AccessGuard::recipientId();
+if ($recipientId === '') {
+    fwrite(STDERR, "ALLOWED_TELEGRAM_USER_ID is empty. Set her Telegram ID in .env.\n");
     exit(1);
 }
-
-$recipient = json_decode((string) file_get_contents($recipientFile), true);
-if (!is_array($recipient) || empty($recipient['chat_id'])) {
-    fwrite(STDERR, "Recipient data is invalid.\n");
-    exit(1);
-}
-
-if (!AccessGuard::allows($recipient['user_id'] ?? null)) {
-    fwrite(STDERR, "Stored recipient does not match ALLOWED_TELEGRAM_USER_ID. Refusing to send.\n");
-    exit(1);
-}
+$recipient = ['chat_id' => $recipientId, 'user_id' => $recipientId];
 
 $now = new DateTimeImmutable('now', $timezone);
 $month = (int) ($_ENV['BIRTHDAY_MONTH'] ?? 10);

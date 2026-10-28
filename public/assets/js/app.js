@@ -47,11 +47,18 @@
 
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
   const target = new Date('2026-10-30T00:00:00+05:00');
-  // Предпросмотр до дня рождения - только для автора по ссылке с ключом ?preview=solnce3010.
-  // Режим автора: полный доступ в любой день, если Mini App открыт с аккаунта автора в Telegram.
-  const OWNER_TELEGRAM_ID = 33612524;
-  const isOwner = tg?.initDataUnsafe?.user?.id === OWNER_TELEGRAM_ID;
-  let previewMode = new URLSearchParams(location.search).get('preview') === 'solnce3010' || isOwner;
+  // Доступ по Telegram ID (Mini App, открытый кнопкой из бота):
+  //  - автор: всё и сразу, плюс панель 🔧;
+  //  - она: всё, но только с 30.10 00:00;
+  //  - все остальные: только счётчик.
+  const OWNER_TELEGRAM_ID = 33612524, RECIPIENT_TELEGRAM_ID = 165017815;
+  const tgUserId = tg?.initDataUnsafe?.user?.id;
+  const isOwner = tgUserId === OWNER_TELEGRAM_ID;
+  // Ключ ?preview=solnce3010 работает только на локальном сервере разработки.
+  const localPreview = ['localhost', '127.0.0.1'].includes(location.hostname) && new URLSearchParams(location.search).get('preview') === 'solnce3010';
+  const isInvited = isOwner || tgUserId === RECIPIENT_TELEGRAM_ID || localPreview;
+  if (!isInvited) document.body.classList.add('guest');
+  let previewMode = isOwner || localPreview;
   // Сдвиг времени для тестов автора (перемотка к полуночи 30.10); у неё всегда 0.
   let timeOffset = 0;
   const now = () => Date.now() + timeOffset;
@@ -159,7 +166,7 @@
       const label = plural(value, unitWords[key]);
       for (const id of [key + '-label', 'poster-' + key + '-label']) { const l = $(id); if (l) l.textContent = label; }
     }
-    if (now() >= target.getTime() && !document.body.classList.contains('is-birthday')) {
+    if (isInvited && now() >= target.getTime() && !document.body.classList.contains('is-birthday')) {
       document.body.classList.add('is-birthday');
       const posterSubtitle = $('poster-subtitle'), posterCountdown = $('poster-countdown');
       if (posterSubtitle) posterSubtitle.innerHTML = 'Сегодня твой день!<br>С днем рождения,<br>моя любимая';
@@ -341,7 +348,7 @@
   window.addEventListener('resize', () => { if (!finale.hidden) sizeCanvas(); });
   // ---------- «Найди сердечки»: по одному в главах I–V ----------
   const heartSpots = [
-    {top:'14%', left:'7%'}, {top:'52%', left:'90%'}, {top:'86%', left:'10%'}, {top:'9%', left:'84%'}, {top:'64%', left:'4%'}
+    {top:'14%', left:'8%'}, {top:'52%', left:'90%'}, {top:'86%', left:'10%'}, {top:'64%', left:'9%'}, {top:'94%', left:'88%'}
   ];
   const HEARTS_KEY = 'solnce-hearts-2026';
   const hiddenHeart = $('hidden-heart'), heartsBadge = $('hearts-badge'), heartsDots = $('hearts-dots'), heartsText = $('hearts-text'), bonus = $('bonus');
@@ -428,7 +435,7 @@
     Promise.race([Promise.all([imgReady, fontsReady]), new Promise((r) => window.setTimeout(r, 4000))]).then(hide);
   }
   // ---------- Панель автора (видна только автору) ----------
-  if (isOwner || new URLSearchParams(location.search).get('preview') === 'solnce3010') {
+  if (isOwner || localPreview) {
     const panel = document.createElement('div'); panel.className = 'owner-panel';
     panel.innerHTML = `<button class="owner-toggle" type="button" aria-expanded="false" aria-label="Панель автора">🔧</button>
       <div class="owner-menu" hidden>
@@ -465,6 +472,6 @@
 
   // If opened through a Telegram deep link with ?story=1, start at the story screen.
   const params = new URLSearchParams(location.search);
-  if (params.get('story') === '1' && !isLocked()) { openStoryApp(); showCountdown(); }
+  if (params.get('story') === '1' && isInvited && !isLocked()) { openStoryApp(); showCountdown(); }
   else { showCountdown(); }
 })();

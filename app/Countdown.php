@@ -77,6 +77,39 @@ final class Countdown
             . "Когда будешь готова, нажми кнопку ниже. Я хочу рассказать тебе все это в твоем темпе. ❤️";
     }
 
+    /** What everyone except the recipient and the author sees: the countdown and nothing else. */
+    public static function guestMessage(): string
+    {
+        $timezone = new DateTimeZone($_ENV['APP_TIMEZONE'] ?? 'Asia/Tashkent');
+        $now = new DateTimeImmutable('now', $timezone);
+        $seconds = max(0, self::target()->getTimestamp() - $now->getTimestamp());
+        if ($seconds === 0) {
+            return "✦ HAPPY DAY MY LOVE ✦\n\nСегодня особенный день ✨\n\nЭтот сюрприз приготовлен для одного особенного человека. ❤️";
+        }
+
+        $days = intdiv($seconds, 86400);
+        $hours = intdiv($seconds % 86400, 3600);
+        $minutes = intdiv($seconds % 3600, 60);
+        $parts = [];
+        if ($days > 0) {
+            $parts[] = $days . ' ' . self::plural($days, 'день', 'дня', 'дней');
+        }
+        if ($hours > 0 || $days > 0) {
+            $parts[] = $hours . ' ' . self::plural($hours, 'час', 'часа', 'часов');
+        }
+        $parts[] = $minutes . ' ' . self::plural($minutes, 'минута', 'минуты', 'минут');
+
+        return "✦ HAPPY DAY MY LOVE ✦\n\n"
+            . "До 30 октября осталось:\n\n"
+            . "✨ " . implode("\n✨ ", $parts) . "\n\n"
+            . "Этот сюрприз приготовлен для одного особенного человека. ❤️";
+    }
+
+    public static function guestKeyboard(): array
+    {
+        return ['inline_keyboard' => [[['text' => '❤️ Обновить отсчёт', 'callback_data' => 'refresh_countdown']]]];
+    }
+
     /** Keyboard for the birthday notification: opens the Mini App surprise first. */
     public static function birthdayKeyboard(): array
     {

@@ -13,16 +13,24 @@ final class AccessGuard
         return $owner !== '' && $telegramUserId !== null && hash_equals($owner, (string) $telegramUserId);
     }
 
+    /** Full functionality: only the author and the recipient. Everyone else sees the countdown only. */
     public static function allows(int|string|null $telegramUserId): bool
     {
         if (self::isOwner($telegramUserId)) {
             return true;
         }
-        $allowed = trim((string) ($_ENV['ALLOWED_TELEGRAM_USER_ID'] ?? ''));
-        if ($allowed === '') {
-            // Empty means development mode. Set ALLOWED_TELEGRAM_USER_ID before production.
-            return true;
-        }
-        return $telegramUserId !== null && hash_equals($allowed, (string) $telegramUserId);
+        return self::isRecipient($telegramUserId);
+    }
+
+    /** The birthday girl: full access on 30.10, receives the notification. */
+    public static function isRecipient(int|string|null $telegramUserId): bool
+    {
+        $allowed = self::recipientId();
+        return $allowed !== '' && $telegramUserId !== null && hash_equals($allowed, (string) $telegramUserId);
+    }
+
+    public static function recipientId(): string
+    {
+        return trim((string) ($_ENV['ALLOWED_TELEGRAM_USER_ID'] ?? ''));
     }
 }

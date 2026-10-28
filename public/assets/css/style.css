@@ -416,8 +416,9 @@ body.no-scroll{overflow:hidden}
   background:url("../images/gallery/photo-2.webp") center 30%/cover;box-shadow:0 0 8px rgba(241,197,110,.6)}
 
 /* ---------- «Найди сердечки» ---------- */
-.hidden-heart{position:absolute;z-index:3;width:40px;height:40px;margin:-20px 0 0 -20px;padding:0;border:0;background:none;cursor:pointer;
-  font-size:17px;line-height:40px;color:var(--gold);opacity:.42;text-shadow:0 0 6px rgba(241,197,110,.6);animation:hide-pulse 3.2s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
+.hidden-heart{position:absolute;z-index:3;width:44px;height:44px;margin:-22px 0 0 -22px;padding:0;border:0;background:none;cursor:pointer;
+  font-size:22px;line-height:44px;color:#f7b8e4;opacity:.75;text-shadow:0 0 4px #fff,0 0 10px #f7b8e4,0 0 18px rgba(241,197,110,.9);
+  animation:hide-pulse 2.6s ease-in-out infinite;-webkit-tap-highlight-color:transparent}
 .hidden-heart:hover{opacity:.9}
 .hidden-heart.caught{animation:caught .5s ease forwards}
 .hearts-badge{position:fixed;z-index:30;left:50%;top:max(10px,env(safe-area-inset-top));transform:translateX(-50%);display:flex;align-items:center;gap:8px;
@@ -447,7 +448,7 @@ body.no-scroll{overflow:hidden}
 .future .secret-text b{color:var(--gold-light)}
 .future-text{text-align:left}
 
-@keyframes hide-pulse{0%,100%{transform:scale(1);opacity:.35}50%{transform:scale(1.18);opacity:.6}}
+@keyframes hide-pulse{0%,100%{transform:scale(1);opacity:.6}50%{transform:scale(1.2);opacity:1}}
 @keyframes caught{to{transform:scale(2.4);opacity:0}}
 @keyframes badge-pop{0%,100%{transform:translateX(-50%) scale(1)}40%{transform:translateX(-50%) scale(1.08)}}
 
@@ -462,5 +463,8 @@ body.no-scroll{overflow:hidden}
 .has-owner .hearts-badge{max-width:calc(100% - 110px)}
 .has-owner .hearts-text{font-size:10px}
 .owner-hint{margin:0 0 2px;font:600 10px var(--sans);letter-spacing:.12em;text-transform:uppercase;color:var(--lavender)}
+
+/* ---------- Гости: только счётчик ---------- */
+.guest .poster-open-button,.guest .poster-gallery-button,.guest .music-toggle,.guest .story-shell,.guest .flourish-infinity{display:none!important}
 
 @media (prefers-reduced-motion:reduce){*,*:before,*:after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}

@@ -108,7 +108,7 @@ final class Countdown
     public static function guestKeyboard(): array
     {
         return ['inline_keyboard' => [
-            [['text' => '❤️ Обновить отсчёт', 'callback_data' => 'refresh_countdown']],
+            [['text' => '❤️ Обновить отсчет', 'callback_data' => 'refresh_countdown']],
             [['text' => '💌 Поздравить', 'callback_data' => 'congrats']],
         ]];
     }

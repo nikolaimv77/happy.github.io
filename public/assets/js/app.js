@@ -48,9 +48,9 @@
   // Birthday is fixed to 30 October 2026, midnight in Tashkent (UTC+5).
   const target = new Date('2026-10-30T00:00:00+05:00');
   // Доступ по Telegram ID (Mini App, открытый кнопкой из бота):
-  //  - автор: всё и сразу, плюс панель 🔧;
-  //  - она: всё, но только с 30.10 00:00;
-  //  - все остальные: только счётчик.
+  //  - автор: все и сразу, плюс панель 🔧;
+  //  - она: все, но только с 30.10 00:00;
+  //  - все остальные: только счетчик.
   const OWNER_TELEGRAM_ID = 33612524, RECIPIENT_TELEGRAM_ID = 165017815;
   const tgUserId = tg?.initDataUnsafe?.user?.id;
   const isOwner = tgUserId === OWNER_TELEGRAM_ID;
@@ -68,7 +68,7 @@
     .then((r) => (r.ok ? r.json() : {})).then((d) => applyAccess(Boolean(d && d.openForAll))).catch(() => {});
   if (!isPersonal) { loadAccess(); setInterval(loadAccess, 60000); }
   let previewMode = isOwner || localPreview;
-  // Сдвиг времени для тестов автора (перемотка к полуночи 30.10); у неё всегда 0.
+  // Сдвиг времени для тестов автора (перемотка к полуночи 30.10); у нее всегда 0.
   let timeOffset = 0;
   const now = () => Date.now() + timeOffset;
   // Сюрприз закрыт до 30.10.2026 00:00 (Ташкент); в эту минуту бот присылает уведомление.

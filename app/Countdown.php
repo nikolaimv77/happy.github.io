@@ -109,7 +109,7 @@ final class Countdown
     {
         return ['inline_keyboard' => [
             [['text' => '❤️ Обновить отсчёт', 'callback_data' => 'refresh_countdown']],
-            [['text' => '💌 Поздравить её', 'callback_data' => 'congrats']],
+            [['text' => '💌 Поздравить', 'callback_data' => 'congrats']],
         ]];
     }
 

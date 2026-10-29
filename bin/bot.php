@@ -50,7 +50,7 @@ function birthdayStart(): int
 
 function congratsKeyboard(): array
 {
-    return ['inline_keyboard' => [[['text' => '💌 Поздравить её', 'callback_data' => 'congrats']]]];
+    return ['inline_keyboard' => [[['text' => '💌 Поздравить', 'callback_data' => 'congrats']]]];
 }
 
 const CONGRATS_PROMPT = "💌 Напиши поздравление одним сообщением — текст, фото, видео, голосовое или кружочек.\n\nОно придёт ей вместе с твоим именем.";

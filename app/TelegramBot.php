@@ -69,7 +69,9 @@ final class TelegramBot
             throw new RuntimeException("Telegram API error ({$status}): {$description}");
         }
 
-        return $decoded['result'] ?? [];
+        // Some methods (answerCallbackQuery, deleteMessage…) return plain `true` instead of an object.
+        $result = $decoded['result'] ?? [];
+        return is_array($result) ? $result : ['ok' => $result];
     }
 
     public function sendMessage(int|string $chatId, string $text, ?array $replyMarkup = null): array
@@ -149,6 +151,8 @@ final class TelegramBot
             throw new RuntimeException("Telegram API error ({$status}): {$description}");
         }
 
-        return $decoded['result'] ?? [];
+        // Some methods (answerCallbackQuery, deleteMessage…) return plain `true` instead of an object.
+        $result = $decoded['result'] ?? [];
+        return is_array($result) ? $result : ['ok' => $result];
     }
 }

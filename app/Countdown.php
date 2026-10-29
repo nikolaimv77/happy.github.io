@@ -107,7 +107,10 @@ final class Countdown
 
     public static function guestKeyboard(): array
     {
-        return ['inline_keyboard' => [[['text' => '❤️ Обновить отсчёт', 'callback_data' => 'refresh_countdown']]]];
+        return ['inline_keyboard' => [
+            [['text' => '❤️ Обновить отсчёт', 'callback_data' => 'refresh_countdown']],
+            [['text' => '💌 Поздравить её', 'callback_data' => 'congrats']],
+        ]];
     }
 
     /** Keyboard for the birthday notification: opens the Mini App surprise first. */

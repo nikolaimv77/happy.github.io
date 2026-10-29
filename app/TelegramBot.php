@@ -86,6 +86,16 @@ final class TelegramBot
         return $this->request('sendMessage', $data);
     }
 
+    /** Copies any message (text, photo, video, voice, sticker…) without the "Forwarded from" header. */
+    public function copyMessage(int|string $chatId, int|string $fromChatId, int $messageId): array
+    {
+        return $this->request('copyMessage', [
+            'chat_id' => $chatId,
+            'from_chat_id' => $fromChatId,
+            'message_id' => $messageId,
+        ]);
+    }
+
     public function editMessageText(int|string $chatId, int $messageId, string $text, ?array $replyMarkup = null): array
     {
         $data = [

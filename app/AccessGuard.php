@@ -13,10 +13,10 @@ final class AccessGuard
         return $owner !== '' && $telegramUserId !== null && hash_equals($owner, (string) $telegramUserId);
     }
 
-    /** Full functionality: only the author and the recipient. Everyone else sees the countdown only. */
-    public static function allows(int|string|null $telegramUserId): bool
+    /** Full functionality: the author and the recipient, or everyone when the author opened it for all. */
+    public static function allows(int|string|null $telegramUserId, bool $openForAll = false): bool
     {
-        if (self::isOwner($telegramUserId)) {
+        if ($openForAll || self::isOwner($telegramUserId)) {
             return true;
         }
         return self::isRecipient($telegramUserId);

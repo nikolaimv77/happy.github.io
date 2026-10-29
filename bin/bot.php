@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\AccessGuard;
+use App\AccessMode;
 use App\Countdown;
 use App\Greeting;
 use App\Story;
@@ -31,6 +32,20 @@ if (!is_dir($storage)) {
     mkdir($storage, 0700, true);
 }
 
+function accessStatusText(bool $openForAll): string
+{
+    return $openForAll
+        ? "🔓 Сюрприз открыт для всех\n\nЛюбой, кто откроет бота или сайт, сможет открыть сюрприз (с 30.10 00:00, как и она)."
+        : "🔒 Сюрприз только для неё\n\nОна (и ты) — полный доступ, все остальные видят только счётчик.";
+}
+
+function accessKeyboard(bool $openForAll): array
+{
+    return ['inline_keyboard' => [[$openForAll
+        ? ['text' => '🔒 Закрыть — только для неё', 'callback_data' => 'access:close']
+        : ['text' => '🔓 Открыть сюрприз для всех', 'callback_data' => 'access:open']]]];
+}
+
 $bot = new TelegramBot($token);
 $me = $bot->getMe();
 printf("Bot started: @%s. Press Ctrl+C to stop.\n", $me['username'] ?? 'unknown');
@@ -40,6 +55,8 @@ $offset = is_file($offsetFile) ? (int) file_get_contents($offsetFile) : 0;
 while (true) {
     try {
         $updates = $bot->getUpdates($offset);
+
+        $openForAll = AccessMode::isOpenForAll($storage);
 
         foreach ($updates as $update) {
             $offset = max($offset, ((int) $update['update_id']) + 1);
@@ -57,7 +74,7 @@ while (true) {
                     continue;
                 }
 
-                if (!AccessGuard::allows($fromId)) {
+                if (!AccessGuard::allows($fromId, $openForAll)) {
                     // Guests see only the countdown: no story, no Mini App, never saved as the recipient.
                     $bot->sendMessage($chatId, Countdown::guestMessage(), Countdown::guestKeyboard());
                     continue;
@@ -65,19 +82,25 @@ while (true) {
 
                 if (str_starts_with($text, '/start') && $isOwner) {
                     $bot->sendMessage($chatId, "🔧 Режим автора\n\nТебе все открыто уже сейчас: история (/story, /restart) и Mini App по кнопке ниже. Получателем ты не записываешься — уведомление 30.10 уйдет ей.", Countdown::birthdayKeyboard());
+                    $bot->sendMessage($chatId, accessStatusText($openForAll), accessKeyboard($openForAll));
+                } elseif ($text === '/access' && $isOwner) {
+                    $bot->sendMessage($chatId, accessStatusText($openForAll), accessKeyboard($openForAll));
                 } elseif (str_starts_with($text, '/start')) {
+                    $isRecipient = AccessGuard::isRecipient($fromId);
                     $recipient = [
                         'chat_id' => $chatId,
                         'user_id' => $fromId,
                         'first_name' => (string) ($message['from']['first_name'] ?? 'солнышко'),
                         'started_at' => date(DATE_ATOM),
                     ];
-                    file_put_contents(
-                        $recipientFile,
-                        json_encode($recipient, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR),
-                        LOCK_EX
-                    );
-                    @chmod($recipientFile, 0600);
+                    if ($isRecipient) {
+                        file_put_contents(
+                            $recipientFile,
+                            json_encode($recipient, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR),
+                            LOCK_EX
+                        );
+                        @chmod($recipientFile, 0600);
+                    }
 
                     if ($storyOpen) {
                         $chapter = $progress->get($chatId);
@@ -88,12 +111,14 @@ while (true) {
                             $bot->sendPhoto($chatId, $countdownImage, 'Midnight Romance ✨\nДля моего солнышка ❤️');
                         }
                         $countdownMessage = $bot->sendMessage($chatId, Countdown::message(), Countdown::keyboard());
-                        file_put_contents(
-                            $countdownFile,
-                            json_encode(['chat_id' => $chatId, 'message_id' => (int) ($countdownMessage['message_id'] ?? 0)], JSON_THROW_ON_ERROR),
-                            LOCK_EX
-                        );
-                        @chmod($countdownFile, 0600);
+                        if ($isRecipient) {
+                            file_put_contents(
+                                $countdownFile,
+                                json_encode(['chat_id' => $chatId, 'message_id' => (int) ($countdownMessage['message_id'] ?? 0)], JSON_THROW_ON_ERROR),
+                                LOCK_EX
+                            );
+                            @chmod($countdownFile, 0600);
+                        }
                         $bot->sendMessage($chatId, "Когда наступит твой день, здесь откроется маленькая история из нескольких глав. ❤️\n\nКоманды: /countdown — отсчет, /story — продолжить историю, /help — помощь.");
                     }
                 } elseif ($text === '/countdown') {
@@ -101,7 +126,7 @@ while (true) {
                         $bot->sendPhoto($chatId, $countdownImage, 'Midnight Romance ✨\nДля моего солнышка ❤️');
                     }
                     $countdownMessage = $bot->sendMessage($chatId, Countdown::message(), Countdown::keyboard());
-                    if (!$isOwner) {
+                    if (AccessGuard::isRecipient($fromId)) {
                         file_put_contents(
                             $countdownFile,
                             json_encode(['chat_id' => $chatId, 'message_id' => (int) ($countdownMessage['message_id'] ?? 0)], JSON_THROW_ON_ERROR),
@@ -140,7 +165,22 @@ while (true) {
                 if ($callbackId === '') {
                     continue;
                 }
-                if (!AccessGuard::allows($fromId)) {
+                if (($data === 'access:open' || $data === 'access:close') && AccessGuard::isOwner($fromId)) {
+                    $openForAll = $data === 'access:open';
+                    $result = AccessMode::set($storage, $openForAll);
+                    if ($callbackChatId !== null && $messageId !== null) {
+                        try {
+                            $bot->editMessageText($callbackChatId, (int) $messageId, accessStatusText($openForAll) . "\n\n" . $result, accessKeyboard($openForAll));
+                        } catch (Throwable $e) {
+                            if (!str_contains($e->getMessage(), 'message is not modified')) {
+                                throw $e;
+                            }
+                        }
+                    }
+                    $bot->answerCallbackQuery($callbackId, $openForAll ? 'Открыто для всех 🔓' : 'Только для неё 🔒');
+                    continue;
+                }
+                if (!AccessGuard::allows($fromId, $openForAll)) {
                     if ($data === 'refresh_countdown' && $callbackChatId !== null && $messageId !== null) {
                         try {
                             $bot->editMessageText($callbackChatId, (int) $messageId, Countdown::guestMessage(), Countdown::guestKeyboard());

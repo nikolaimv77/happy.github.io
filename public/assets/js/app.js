@@ -56,8 +56,17 @@
   const isOwner = tgUserId === OWNER_TELEGRAM_ID;
   // Ключ ?preview=solnce3010 работает только на локальном сервере разработки.
   const localPreview = ['localhost', '127.0.0.1'].includes(location.hostname) && new URLSearchParams(location.search).get('preview') === 'solnce3010';
-  const isInvited = isOwner || tgUserId === RECIPIENT_TELEGRAM_ID || localPreview;
-  if (!isInvited) document.body.classList.add('guest');
+  const isPersonal = isOwner || tgUserId === RECIPIENT_TELEGRAM_ID || localPreview;
+  // Автор может открыть сюрприз для всех кнопкой в боте — тогда флаг в assets/access.json = true.
+  let isInvited = isPersonal;
+  const applyAccess = (openForAll) => {
+    isInvited = isPersonal || openForAll;
+    document.body.classList.toggle('guest', !isInvited);
+  };
+  applyAccess(false);
+  const loadAccess = () => fetch('./assets/access.json?t=' + Date.now(), {cache: 'no-store'})
+    .then((r) => (r.ok ? r.json() : {})).then((d) => applyAccess(Boolean(d && d.openForAll))).catch(() => {});
+  if (!isPersonal) { loadAccess(); setInterval(loadAccess, 60000); }
   let previewMode = isOwner || localPreview;
   // Сдвиг времени для тестов автора (перемотка к полуночи 30.10); у неё всегда 0.
   let timeOffset = 0;

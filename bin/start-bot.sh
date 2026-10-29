@@ -16,4 +16,11 @@ if ! TELEGRAM_BOT_TOKEN="$(security find-generic-password -a "$USER" -s happy-bo
 fi
 export TELEGRAM_BOT_TOKEN
 
+# Необязательно: токен GitHub (contents:write на этот репозиторий) — чтобы кнопка
+# «Открыть сюрприз для всех» в боте обновляла и сайт. Сохранить:
+#   security add-generic-password -a "$USER" -s happy-github-token -w
+if GITHUB_TOKEN="$(security find-generic-password -a "$USER" -s happy-github-token -w 2>/dev/null)"; then
+  export GITHUB_TOKEN
+fi
+
 exec caffeinate -i php bin/bot.php

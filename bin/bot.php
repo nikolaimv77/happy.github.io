@@ -53,19 +53,19 @@ function congratsKeyboard(): array
     return ['inline_keyboard' => [[['text' => '💌 Поздравить', 'callback_data' => 'congrats']]]];
 }
 
-const CONGRATS_PROMPT = "💌 Напиши поздравление одним сообщением — текст, фото, видео, голосовое или кружочек.\n\nОно придёт ей вместе с твоим именем.";
+const CONGRATS_PROMPT = "💌 Напиши поздравление одним сообщением — текст, фото, видео, голосовое или кружочек.\n\nОно придет ей вместе с твоим именем.";
 
 function accessStatusText(bool $openForAll): string
 {
     return $openForAll
         ? "🔓 Сюрприз открыт для всех\n\nЛюбой, кто откроет бота или сайт, сможет открыть сюрприз (с 30.10 00:00, как и она)."
-        : "🔒 Сюрприз только для неё\n\nОна (и ты) — полный доступ, все остальные видят только счётчик.";
+        : "🔒 Сюрприз только для нее\n\nОна (и ты) — полный доступ, все остальные видят только счетчик.";
 }
 
 function accessKeyboard(bool $openForAll): array
 {
     return ['inline_keyboard' => [[$openForAll
-        ? ['text' => '🔒 Закрыть — только для неё', 'callback_data' => 'access:close']
+        ? ['text' => '🔒 Закрыть — только для нее', 'callback_data' => 'access:close']
         : ['text' => '🔓 Открыть сюрприз для всех', 'callback_data' => 'access:open']]]];
 }
 
@@ -97,7 +97,7 @@ while (true) {
                     continue;
                 }
 
-                // ---- Поздравления: доступны всем, кроме неё самой ----
+                // ---- Поздравления: доступны всем, кроме нее самой ----
                 if ($text === '/congrats') {
                     if (AccessGuard::isRecipient($fromId)) {
                         $bot->sendMessage($chatId, 'Это твой день — все поздравления летят к тебе 💌');
@@ -117,12 +117,12 @@ while (true) {
                     $started = time() >= birthdayStart();
                     $bot->sendMessage(
                         $chatId,
-                        $started ? 'Спасибо! Твоё поздравление уже летит к ней ✨' : 'Спасибо! Твоё поздравление придёт ей 30 октября в 00:00 ✨',
+                        $started ? 'Спасибо! Твое поздравление уже летит к ней ✨' : 'Спасибо! Твое поздравление придет ей 30 октября в 00:00 ✨',
                         congratsKeyboard()
                     );
                     if ($ownerId !== '' && (string) $fromId !== $ownerId) {
                         try {
-                            $bot->sendMessage($ownerId, '📨 ' . Greetings::header($item) . ($started ? '' : "\n(ей придёт 30.10 в 00:00)"));
+                            $bot->sendMessage($ownerId, '📨 ' . Greetings::header($item) . ($started ? '' : "\n(ей придет 30.10 в 00:00)"));
                             $bot->copyMessage($ownerId, $chatId, (int) $item['message_id']);
                         } catch (Throwable $e) {
                             fwrite(STDERR, '[' . date(DATE_ATOM) . '] Greeting copy to owner: ' . $e->getMessage() . PHP_EOL);
@@ -168,9 +168,6 @@ while (true) {
                         $bot->sendMessage($chatId, Story::scene($chapter)['text'], Story::keyboard($chapter));
                     } else {
                         $bot->sendMessage($chatId, Greeting::start());
-                        if (is_file($countdownImage)) {
-                            $bot->sendPhoto($chatId, $countdownImage, 'Midnight Romance ✨\nДля моего солнышка ❤️');
-                        }
                         $countdownMessage = $bot->sendMessage($chatId, Countdown::message(), Countdown::keyboard());
                         if ($isRecipient) {
                             file_put_contents(
@@ -180,15 +177,11 @@ while (true) {
                             );
                             @chmod($countdownFile, 0600);
                         }
-                        $bot->sendMessage($chatId, "Когда наступит твой день, здесь откроется маленькая история из нескольких глав. ❤️\n\nКоманды: /countdown — отсчет, /story — продолжить историю, /help — помощь.");
                     }
                     if (!$isRecipient) {
-                        $bot->sendMessage($chatId, 'Хочешь поздравить её с днём рождения?', congratsKeyboard());
+                        $bot->sendMessage($chatId, 'Хочешь поздравить с днем рождения?', congratsKeyboard());
                     }
                 } elseif ($text === '/countdown') {
-                    if (is_file($countdownImage)) {
-                        $bot->sendPhoto($chatId, $countdownImage, 'Midnight Romance ✨\nДля моего солнышка ❤️');
-                    }
                     $countdownMessage = $bot->sendMessage($chatId, Countdown::message(), Countdown::keyboard());
                     if (AccessGuard::isRecipient($fromId)) {
                         file_put_contents(
@@ -234,7 +227,7 @@ while (true) {
                         $bot->answerCallbackQuery($callbackId, 'Это твой день — поздравления летят к тебе 💌');
                     } else {
                         $greetings->startAwaiting($fromId);
-                        $bot->answerCallbackQuery($callbackId, 'Жду твоё поздравление 💌');
+                        $bot->answerCallbackQuery($callbackId, 'Жду твое поздравление 💌');
                         if ($callbackChatId !== null) {
                             $bot->sendMessage($callbackChatId, CONGRATS_PROMPT);
                         }
@@ -253,7 +246,7 @@ while (true) {
                             }
                         }
                     }
-                    $bot->answerCallbackQuery($callbackId, $openForAll ? 'Открыто для всех 🔓' : 'Только для неё 🔒');
+                    $bot->answerCallbackQuery($callbackId, $openForAll ? 'Открыто для всех 🔓' : 'Только для нее 🔒');
                     continue;
                 }
                 if (!AccessGuard::allows($fromId, $openForAll)) {
@@ -265,7 +258,7 @@ while (true) {
                                 throw $e;
                             }
                         }
-                        $bot->answerCallbackQuery($callbackId, 'Отсчёт обновлён ❤️');
+                        $bot->answerCallbackQuery($callbackId, 'Отсчет обновлен ❤️');
                     } else {
                         $bot->answerCallbackQuery($callbackId, 'Этот сюрприз приготовлен для одного особенного человека. ❤️');
                     }
@@ -330,7 +323,7 @@ while (true) {
                 if ($ownerId !== '' && !is_file($sentMarker . '.warned')) {
                     @file_put_contents($sentMarker . '.warned', date(DATE_ATOM));
                     try {
-                        $bot->sendMessage($ownerId, '⚠️ Не удалось отправить ей уведомление: ' . $e->getMessage() . "\nСкорее всего, она ещё ни разу не нажимала /start в боте.");
+                        $bot->sendMessage($ownerId, '⚠️ Не удалось отправить ей уведомление: ' . $e->getMessage() . "\nСкорее всего, она еще ни разу не нажимала /start в боте.");
                     } catch (Throwable) {
                     }
                 }
